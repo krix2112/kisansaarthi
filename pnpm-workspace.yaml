@@ -1,0 +1,10 @@
+packages:
+  - 'backend'
+  - 'voice-ai'
+  - 'mobile-app'
+  - 'staff-dashboard'
+  - 'web-dashboard'
+  - 'agrochain'
+  - 'design'
+  - 'docs'
+  - 'pitch'
