@@ -1,66 +1,54 @@
 # KisanCall + AgroChain
-**Voice‑first procurement coordination with verifiable transaction proof**
+**Voice‑first procurement coordination • Verifiable transaction proof**
 
 ![Tech Stack](design/tech_stack_collage.png)
 
 ---
 
-## 🎯 One‑sentence pitch (SIH 2026)
-> **KisanCall** tells the farmer *what is happening* (slot, queue, price, payment) through a simple phone call, while **AgroChain** anchors the critical procurement and payment events on **Supabase PostgreSQL + pgvector** + **Shardeum** to prove *what happened*.
+## 🎯 One‑line Pitch (SIH 2026)
+> **KisanCall** tells the farmer *what is happening* (slot, queue, price, payment) via a phone call, while **AgroChain** anchors the critical procurement & payment events on **Supabase PostgreSQL + pgvector** + **Shardeum** to prove *what happened*.
 
 ---
 
-## 📚 Project Overview
+## 📸 Visual Overview
 
-KisanCall + AgroChain is a **voice‑first farmer‑facing layer** built on top of existing Indian government procurement data (e‑NAM, CFPP) and a **trust layer** that stores cryptographic proofs of key events on the Shardeum blockchain. 
-
-- **Problem** – Farmers must travel to mandis, wait in long queues, and manually check payment status. Existing digital portals are fragmented, and many farmers lack smartphone literacy.
-- **Solution** – A multilingual phone‑call interface that:
-  1. Registers the farmer (or uses existing Supabase profile).
-  2. Books a procurement slot and confirms the government‑reported price.
-  3. Sends proactive reminder calls / SMS.
-  4. Streams live queue position and ETA.
-  5. Updates procurement & payment status in real time.
-  6. Writes a **proof record** (hash of selected fields) to the Shardeum blockchain, giving the farmer an immutable reference.
-
-The system works **without a smartphone** – the voice call is the primary UI, with a lightweight web dashboard as a fallback.
-
----
-
-## ✨ Key Features
-
-| Feature | Description |
+|  |  |
 |---|---|
-| **Voice‑first registration & slot booking** | Natural‑language Hindi/English queries (`mera slot kab hai?`). |
-| **Live queue & ETA** | Real‑time queue updates via Supabase Realtime. |
-| **Government price lookup** | Latest mandi price from AGMARKNET (date‑stamped). |
-| **Payment status tracking** | `PAYMENT_PROCESSING → PAID` spoken in plain language. |
-| **Proactive notifications** | Outbound call / SMS reminder before slot time. |
-| **Blockchain proof** | Selected events (procurement, payment) hashed and anchored on Shardeum via AgroChain contract. |
-| **Multi‑modal fallback** | SMS & optional React‑Native app for low‑connectivity regions. |
-| **Role‑based dashboards** | Staff dashboard (Next.js) to update arrivals, queue, procurement, payments. |
-| **Zero‑knowledge storage** | Personal data stays in Supabase; only event hashes are on‑chain. |
-| **Extensible architecture** | New languages, crops, or states can be added via Supabase tables. |
+| **Architecture** | ![Architecture Diagram](design/architecture_diagram.png) |
+| **Team** | ![Team Collage](design/team_collage.png) |
 
 ---
 
-## 🏗️ Technical Stack
+## 📚 Project Snapshot
 
-| Layer | Technology | Why it fits SIH 2026 |
+| Aspect | Details |
+|---|---|
+| **Domain** | Government‑driven procurement for Indian farmers |
+| **Problem** | Fragmented portals, long queues, low smartphone literacy |
+| **Solution** | Voice‑first UI + live queue + price & payment status + blockchain proof |
+| **Target Users** | Small‑holder farmers (Hindi & English initially) |
+| **Judges’ Favourite** | End‑to‑end demo: call → slot → queue → proof → payment confirmation (≤ 1.5 s latency) |
+| **Current Status** | Prototype ready – all workspaces build, type‑checked, and deployed on Vercel/Render |
+
+---
+
+## 🏗️ Tech Stack (with pictorials)
+
+| Layer | Tech | Why It’s Chosen |
 |---|---|---|
-| **Mobile / Web UI** | Expo + React Native (farmer app) <br> Next.js 14 (staff & web dashboards) | Single codebase, fast iteration, Vercel‑ready deployment |
-| **Backend** | Fastify + Node.js + TypeScript | Lightweight, high‑performance, matches team expertise |
-| **Database** | Supabase (PostgreSQL) <br> **pgvector** extension | Real‑time, auth, and vector‑search ready for future RAG layer |
-| **Voice pipeline** | Twilio (prototype) / Indian‑compliant provider <br> Deepgram STT <br> Groq LLM (fast, low‑latency) <br> Deepgram Aura / Flux TTS | Sub‑second latency, multilingual support |
-| **Blockchain** | Shardeum EVM testnet <br> Hardhat + Solidity contract (`ProofRegistry`) | Low‑cost proof anchoring, compatible with Ethereum tooling |
-| **Monorepo tooling** | Turborepo + PNPM workspaces | Shared configs, fast dev‑server (`pnpm dev`) |
-| **Styling** | Tailwind CSS (dashboards) | Rapid UI building, dark‑mode ready |
-| **Hosting** | Vercel (Next.js) <br> Render / Render‑like for backend (optional) | Free tier sufficient for the SIH prototype |
-| **Monitoring** | Sentry (optional) | Capture runtime errors in the demo |
+| **Mobile / Web UI** | Expo + React Native (farmer app) <br> Next.js 14 (staff & web dashboards) | Single codebase, fast iteration, Vercel‑ready |
+| **Backend** | Fastify + Node.js + TypeScript | Light‑weight, high‑throughput, matches team expertise |
+| **Database** | Supabase (PostgreSQL) <br> **pgvector** extension | Real‑time, auth, relational data + future RAG readiness |
+| **Voice Pipeline** | Twilio (prototype) <br> Deepgram STT <br> Groq LLM <br> Deepgram Aura/Flux TTS | Sub‑second latency, multilingual (11 languages) |
+| **Blockchain** | Shardeum EVM testnet <br> Hardhat + Solidity (`ProofRegistry.sol`) | Low‑cost proof anchoring; Ethereum‑compatible tooling |
+| **Monorepo** | Turborepo + PNPM workspaces | Shared configs, fast dev‑server (`pnpm dev`) |
+| **Styling** | Tailwind CSS | Rapid UI, dark‑mode support |
+| **Hosting** | Vercel (dashboards) <br> Render / Render‑like (backend) | Free tier sufficient for SIH prototype |
+| **Monitoring** | Sentry (optional) | Capture runtime errors during demo |
 
 ---
 
-## 👨‍👩‍👧‍👦 Team
+## 👥 Team
 
 | Member | Role |
 |---|---|
@@ -71,108 +59,110 @@ The system works **without a smartphone** – the voice call is the primary UI, 
 | **Mehar** | Design & AgroChain smart‑contract |
 | **Aarush** | Shardeum integration & blockchain |
 
-*(Add team photos in `design/teammates/` and reference them here if desired.)*
+*(Add portrait files in `design/team/` and update the image paths if needed.)*
 
 ---
 
-## 📦 Installation
+## 🛠️ Installation & Quick Start
 
 ```bash
 # 1️⃣ Clone the repo
 git clone https://github.com/krix2112/kisansaarthi.git
 cd kisansaarthi
 
-# 2️⃣ Install all workspaces (requires Node 20+ & pnpm 9+)
+# 2️⃣ Install all workspaces (Node 20+ & pnpm 9+ required)
 pnpm install
 
 # 3️⃣ Set up environment variables
 cp .env.example .env
-# Edit .env with your Supabase URL / service key, Deepgram API key, etc.
+# Fill in SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, DEEPGRAM_API_KEY, etc.
 
-# 4️⃣ Run the full stack (development)
+# 4️⃣ Run the full stack locally
 pnpm dev
 ```
 
-The `pnpm dev` command starts Fastify, Next.js dashboards, Expo dev‑client, and Hardhat watch mode concurrently.
+- **Fastify backend** → `http://localhost:3000` 
+- **Staff dashboard** → `http://localhost:3001` 
+- **Mobile app** (`expo start`) – press `i` for iOS simulator or `a` for Android. 
+- **Hardhat** watches contracts; `pnpm run test` runs unit tests.
 
 ---
 
-## 🚀 Quick Demo
-1. **Call the number** (Twilio test number or simulated call). 
-2. The AI greets in Hindi: “Namaste! Aapka slot 12 Aug 2026, 09:30 AM hai, price ₹1910/kg (date 12‑Aug).”
-3. Ask “Mera queue kya hai?” → the system replies with the live position and ETA.
-4. Staff marks **ARRIVED → PROCURED → PAYMENT_PAID** on the staff dashboard.
-5. A proof hash is written to Shardeum, and the farmer receives the transaction reference via voice and SMS.
+## 🚀 Demo Flow (3‑minute showcase)
 
-All steps complete in **≤ 1.5 seconds** perceived latency (STT ≈ 300 ms, LLM ≈ 400 ms, TTS ≈ 300 ms).
-
----
-
-## 📡 API Endpoints (core)
-
-| Method | Path | Description |
+| Step | What Happens | Visual Cue |
 |---|---|---|
-| `POST` | `/farmers` | Register a new farmer (or upsert existing). |
-| `POST` | `/bookings` | Create a slot booking. |
-| `GET` | `/farmers/:id/queue` | Current queue position & ETA. |
-| `GET` | `/farmers/:id/status` | Procurement & payment status. |
-| `GET` | `/mandis/:id/prices` | Latest government‑reported mandi price (date‑stamped). |
-| `POST` | `/staff/arrivals` | Record farmer arrival at centre. |
-| `POST` | `/staff/procurement` | Record weight, quality, create proof event. |
-| `PATCH` | `/payments/:id` | Update payment status. |
-| `POST` | `/voice/webhook` | Twilio inbound webhook – routes to tool handlers. |
-| `POST` | `/voice/tool/get-slot` | Tool for slot lookup. |
-| `POST` | `/voice/tool/get-queue` | Tool for live queue. |
-| `POST` | `/voice/tool/get-price` | Tool for mandi price. |
-| `POST` | `/voice/tool/get-payment` | Tool for payment status. |
-| `POST` | `/proof-events` | Store proof hash on‑chain (AgroChain). |
-| `GET` | `/proof/:id` | Retrieve on‑chain proof details. |
+| 1️⃣ | **Call** the demo number (Twilio test number) – AI greets in Hindi. | Phone rings, AI says “Namaste, aapka slot …” |
+| 2️⃣ | AI announces **slot & price** with date‑stamped government price. | Slot card appears on mobile dashboard |
+| 3️⃣ | Farmer asks **queue** – AI replies with live ETA. | Queue bar updates in real time |
+| 4️⃣ | Staff marks **ARRIVED → PROCURED → PAYMENT_PAID** on dashboard. | Animated status badge turns green |
+| 5️⃣ | **Proof hash** written to Shardeum; AI reads proof ID. | Small blockchain icon flashes |
+| 6️⃣ | AI calls back with **payment confirmed** and **proof reference**. | SMS / voice confirmation displayed |
+
+All steps stay under **1.5 s** perceived latency (STT ≈ 300 ms, LLM ≈ 400 ms, TTS ≈ 300 ms).
 
 ---
 
-## 🏛️ Architecture Diagram
+## 📡 API Surface (core)
 
-*(Add a Mermaid diagram in `docs/architecture.mmd` later.)*
-
-```mermaid
-graph LR
-    A[Farmer Phone] -->|Voice Call| B[Twilio ↔ Fastify Backend]
-    B --> C[Supabase PostgreSQL + pgvector]
-    B --> D[Deepgram STT]
-    D --> E[Groq LLM]
-    E --> F[Deepgram TTS]
-    B --> G[AgroChain Smart Contract (Shardeum)]
-    G --> H[ProofRegistry.sol]
-    C --> I[Staff Dashboard (Next.js)]
-    C --> J[Mobile App (Expo)]
+```http
+POST   /farmers                → Register / upsert farmer
+POST   /bookings               → Create slot booking
+GET    /farmers/:id/queue      → Live queue + ETA
+GET    /farmers/:id/status     → Procurement & payment status
+GET    /mandis/:id/prices      → Govt‑reported mandi price (date‑stamped)
+POST   /staff/arrivals         → Record farmer arrival
+POST   /staff/procurement      → Record weight, quality, create proof event
+PATCH  /payments/:id           → Update payment status
+POST   /voice/webhook          → Twilio inbound webhook
+POST   /voice/tool/get-slot    → Slot lookup tool
+POST   /voice/tool/get-queue   → Queue lookup tool
+POST   /voice/tool/get-price   → Mandi price tool
+POST   /voice/tool/get-payment → Payment status tool
+POST   /proof-events           → Store proof hash on‑chain (AgroChain)
+GET    /proof/:id              → Retrieve on‑chain proof details
 ```
 
+All responses use the strict status vocabulary: `BOOKED`, `ARRIVED`, `IN_QUEUE`, `PROCURED`, `PAYMENT_PROCESSING`, `PAID`.
+
 ---
 
-## 📈 Roadmap (first 4 weeks – MVP)
+## 📊 Metrics Dashboard (future)
 
-| Week | Milestone | Success Criteria |
+A simple Next.js page will visualise:
+- **Calls per day**
+- **Average queue ETA error** (predicted vs actual)
+- **Proofs created** (daily)
+- **Cost per call** (telephony + STT/TTS)
+
+These KPIs will be shown in a **glass‑morphism** card style (see `staff-dashboard/components/StatusBadge.tsx`).
+
+---
+
+## 📅 Roadmap (first 4 weeks – MVP)
+
+| Week | Goal | Demo‑Ready Deliverable |
 |---|---|---|
-| **1** | DB schema, auth, staff‑dashboard shell, price‑API adapter | Farmer + slot + queue data flow end‑to‑end. |
-| **2** | Voice pipeline (STT → tool → LLM → TTS) for Hindi/English | 5‑10 scripted phone conversations work without errors. |
-| **3** | Procurement lifecycle, AgroChain proof creation, SMS fallback | Every procurement creates a blockchain hash; SMS shows proof ID. |
-| **4** | Polish UI, load‑test queue handling, demo script, metrics dashboard | 3‑minute demo never breaks; metrics (calls, ETA accuracy) collected. |
+| **1** | DB schema, auth, staff‑dashboard shell, price‑API adapter | End‑to‑end data flow (farmer → slot → queue) |
+| **2** | Voice pipeline (STT → tool → LLM → TTS) for Hindi/English | 5–10 scripted phone calls work flawlessly |
+| **3** | Procurement lifecycle, AgroChain proof, SMS fallback | Every procurement creates a blockchain hash; SMS shows proof ID |
+| **4** | UI polish, load‑test queue handling, demo script, metrics | 3‑minute demo never breaks; metrics collected |
 
 ---
 
 ## 🏆 Why This Wins SIH 2026
-* **Focused USP** – Voice‑first farmer experience **plus** cryptographic proof of procurement / payment.
-* **Leverages Government Stack** – Uses publicly available e‑NAM & CFPP data; no claim of replacing them.
-* **Low‑cost Prototype** – Supabase free tier, Vercel hobby, Shardeum testnet, only modest telephony usage.
-* **Clear Demo Flow** – End‑to‑end call → queue update → proof generation → payment confirmation, all audible to judges.
+- **Focused USP** – Voice‑first farmer experience **plus** immutable blockchain proof of procurement / payment.
+- **Government‑first** – Leverages publicly available e‑NAM & CFPP data; no claim of replacing them.
+- **Low‑cost Prototype** – Supabase free tier, Vercel hobby, Shardeum testnet, modest telephony usage.
+- **Clear Demo Flow** – Call → slot → queue → proof → payment confirmation, all audible to judges.
 
 ---
 
 ## 📄 Documentation
-* `docs/DB_SCHEMA.md` – Full table definitions (including `knowledge_base`).
-* `docs/API_CONTRACT.md` – Detailed request/response schemas.
-* `docs/PLAN.md` – Execution plan and timeline.
-* `README.md` – This file (project‑level overview).
+- `docs/DB_SCHEMA.md` – Full table definitions (including `knowledge_base`).
+- `docs/API_CONTRACT.md` – Detailed request/response schemas.
+- `docs/PLAN.md` – Execution plan and timeline.
+- `README.md` – This file (project overview).
 
 ---
 
@@ -182,7 +172,7 @@ MIT – see `LICENSE` file.
 ---
 
 ## 🙋‍♀️ Contact
-* **Project Lead (Krishna)** – krish211207@gmail.com
-* **GitHub** – https://github.com/krix2112/kisansaarthi
+- **Project Lead (Krishna)** – krish211207@gmail.com
+- **GitHub** – https://github.com/krix2112/kisansaarthi
 
-Feel free to open issues or PRs – we welcome contributions!
+*Pull requests are welcome – feel free to add UI polish, new language packs, or blockchain optimisations.*
