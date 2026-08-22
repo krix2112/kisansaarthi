@@ -47,3 +47,13 @@ This document lists all PostgreSQL tables in Supabase. Detailed column definitio
 ### 11. `audit_logs`
 - **Description:** System-wide operation and security audit trails.
 - **Columns:** *(Team to complete)*
+
+### 12. `knowledge_base`
+- **Purpose:** Stores future RAG knowledge records and their vector embeddings inside Supabase PostgreSQL using pgvector.
+- **Columns:**
+  - `id`
+  - `content`
+  - `metadata`
+  - `embedding`
+  - `created_at`
+  - `updated_at`
