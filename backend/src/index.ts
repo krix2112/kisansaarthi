@@ -9,6 +9,7 @@ import { staffRoutes } from './routes/staff.js';
 import { paymentRoutes } from './routes/payments.js';
 import { mandiRoutes } from './routes/mandis.js';
 import { healthRoutes } from './routes/health.js';
+import { fetchAndCachePrices } from './services/mandiPriceFeed.js';
 
 const app = Fastify({ logger: true });
 
@@ -30,6 +31,17 @@ const start = async () => {
     const port = Number(process.env.PORT) || 3001;
     await app.listen({ port, host: '0.0.0.0' });
     console.log(`Backend Fastify server running on port ${port}`);
+
+    // Initial background prefetch from data.gov.in AGMARKNET
+    fetchAndCachePrices({ limit: 50 }).catch((err) => {
+      console.warn('Initial background price fetch notice:', err?.message || err);
+    });
+
+    // Scheduled background refresh every 2 hours
+    setInterval(() => {
+      console.log('Running scheduled data.gov.in price feed synchronization...');
+      fetchAndCachePrices({ limit: 50 }).catch(console.error);
+    }, 2 * 60 * 60 * 1000);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
