@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useApiData } from '../../hooks/useApiData';
+import { useApiData, resolveApiPath } from '../../hooks/useApiData';
 
 interface MarketItem {
   market: string;
@@ -138,7 +138,8 @@ export default function MandiPricesDashboard() {
     setIsRefreshing(true);
     setRefreshMessage(null);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/mandi-prices/refresh`, {
+      const refreshUrl = resolveApiPath('/mandi-prices/refresh');
+      const res = await fetch(refreshUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
