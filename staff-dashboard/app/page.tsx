@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 type NavId = "today" | "queue" | "arrivals" | "procurement" | "payments" | "prices" | "settings";
 
 // --- State Models ---
-type Farmer = { token: string; name: string; village: string; crop: string; qty: number; grade: string; amount: number; status: string; eta?: string };
+type Farmer = { token: string; name: string; village?: string; crop: string; qty: number; grade: string; amount: number; status: string; eta?: string };
 
 const INITIAL_WAITING = [
   { token: "T-048", name: "Ramesh Yadav", village: "Hoshangabad", crop: "Wheat", eta: "~5 min" },
