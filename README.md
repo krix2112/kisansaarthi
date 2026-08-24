@@ -233,100 +233,67 @@ KisanCall is built around three ideas held together tightly:
 
 Both channels write to the exact same backend endpoint, so there is no divergent "app version" and "voice version" of a farmer's record.
 
-```
-   Farmer via Mobile App              Farmer via Voice Call
-   (taps Register)                    ("mera naam Ramesh hai...")
-            │                                    │
-            └──────────────┬─────────────────────┘
-                            ▼
-                  POST /farmers
-                            │
-                            ▼
-                  farmers table (Supabase)
-                            │
-                            ▼
-              Staff Dashboard "Today" view
-              updates instantly (Realtime)
+```mermaid
+graph TD
+    A[Farmer via Mobile App<br/>taps Register] --> C(POST /farmers)
+    B[Farmer via Voice Call<br/>'mera naam Ramesh hai...'] --> C
+    C --> D[(farmers table<br/>Supabase)]
+    D --> E[Staff Dashboard 'Today' view<br/>updates instantly Realtime]
 ```
 
 ### 2. Slot Booking
 
-```
-  Farmer picks a date/time         OR       Farmer tells the AI naturally
-  (tap in app)                              ("mujhe kal subah aana hai")
-            │                                          │
-            └────────────────────┬─────────────────────┘
-                                  ▼
-                         POST /bookings
-                                  │
-                                  ▼
-                 bookings row created — status: BOOKED
-                    token number assigned
-                                  │
-                                  ▼
-                  Supabase Realtime push
-                                  │
-                    ┌─────────────┴─────────────┐
-                    ▼                             ▼
-        Staff Dashboard live queue        Farmer app / call confirms
-              view updates                  slot + today's price
+```mermaid
+graph TD
+    A[Farmer picks a date/time<br/>tap in app] --> C(POST /bookings)
+    B[Farmer tells the AI naturally<br/>'mujhe kal subah aana hai'] --> C
+    C --> D[bookings row created — status: BOOKED<br/>token number assigned]
+    D --> E((Supabase Realtime push))
+    E --> F[Staff Dashboard live queue<br/>view updates]
+    E --> G[Farmer app / call confirms<br/>slot + today's price]
 ```
 
 ### 3. Live Queue Tracking
 
-```
-  Status progression (per booking):
-
-  BOOKED ──► ARRIVED ──► IN_QUEUE ──► PROCURED
-
-     Each transition writes a queue_events row
-     (farmer's live position + estimated wait time)
-                       │
-                       ▼
-        ┌──────────────────────────────┐
-        │      Supabase Realtime         │
-        └──────┬────────────────┬────────┘
-               ▼                ▼
-      Mobile app updates    Voice AI answers
-      position with no      "where is my number"
-      manual refresh         by querying the same table
+```mermaid
+graph TD
+    A[BOOKED] --> B[ARRIVED]
+    B --> C[IN_QUEUE]
+    C --> D[PROCURED]
+    
+    A -.-> E
+    B -.-> E
+    C -.-> E
+    D -.-> E
+    
+    E[Each transition writes a queue_events row<br/>farmer's live position + estimated wait time] --> F((Supabase Realtime))
+    
+    F --> G[Mobile app updates<br/>position with no<br/>manual refresh]
+    F --> H[Voice AI answers<br/>'where is my number'<br/>by querying the same table]
 ```
 
 ### 4. Payment Tracking
 
-```
-   Booking reaches PROCURED
-             │
-             ▼
-   payments row created — status: PENDING
-             │
-             ▼
-   status: PROCESSING  ─────►  status: PAID
-             │                        │
-             ▼                        ▼
-   Visible identically on:   On PAID → AgroChain transaction
-   - Staff Dashboard          hashes + anchors the event as a
-   - Farmer app status screen tamper-evident proof record
-   - Voice AI (on request)
+```mermaid
+graph TD
+    A[Booking reaches PROCURED] --> B[payments row created — status: PENDING]
+    B --> C[status: PROCESSING]
+    C --> D[status: PAID]
+    
+    D --> E[Visible identically on:<br/>- Staff Dashboard<br/>- Farmer app status screen<br/>- Voice AI on request]
+    D --> F[On PAID -> AgroChain transaction<br/>hashes + anchors the event as a<br/>tamper-evident proof record]
 ```
 
 ### 5. Reminders & Notifications
 
-```
-   Backend detects an upcoming slot / a status change
-                       │
-                       ▼
-        Outbound call or SMS triggered automatically
-                       │
-             ┌─────────┴─────────┐
-             ▼                   ▼
-      Call answered        Call not answered
-             │                   │
-             ▼                   ▼
-   Outcome logged to      Automatic retry + SMS,
-   call_logs (visible on   then staff follow-up
-   dashboard's "Recent
-   Voice Calls" panel)
+```mermaid
+graph TD
+    A[Backend detects an upcoming slot / a status change] --> B(Outbound call or SMS triggered automatically)
+    B --> C[Call answered]
+    B --> D[Call not answered]
+    
+    C --> E[Outcome logged to<br/>call_logs visible on<br/>dashboard's 'Recent<br/>Voice Calls' panel]
+    D --> F[Automatic retry + SMS,<br/>then staff follow-up]
 ```
 
 ---
