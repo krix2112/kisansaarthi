@@ -1,12 +1,4 @@
-/** @type {import('tailwindcss').Config} */
-const path = require('path');
-
 module.exports = {
-  content: [
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
   theme: {
     extend: {
       colors: {
@@ -27,6 +19,7 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'Noto Sans', 'Noto Sans Devanagari', 'sans-serif'],
       },
+      // Formal type scale — use these tokens, not ad-hoc text-sm/xl
       fontSize: {
         'eyebrow': ['0.6875rem', { lineHeight: '1rem', letterSpacing: '0.1em', fontWeight: '600' }],
         'caption': ['0.75rem', { lineHeight: '1.25rem', letterSpacing: '0.02em' }],
@@ -39,15 +32,29 @@ module.exports = {
         'h1-xl': ['3.5rem', { lineHeight: '4rem', fontWeight: '800', letterSpacing: '-0.03em' }],
         'stat': ['2.5rem', { lineHeight: '1', fontWeight: '800', letterSpacing: '-0.02em' }],
       },
+      // Vertical rhythm — one spacing scale across all sections
       spacing: {
-        'section': '5rem',
-        'section-sm': '3rem',
+        'section': '5rem',        // py-section = 80px between major sections
+        'section-sm': '3rem',     // tighter variant
         'section-lg': '7rem',
       },
       borderWidth: {
         '1': '1px',
       },
-    },
-  },
-  plugins: [],
-};
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'fade-up': {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        'marquee': 'marquee 40s linear infinite',
+        'fade-up': 'fade-up 0.5s ease-out forwards',
+      },
+    }
+  }
+}

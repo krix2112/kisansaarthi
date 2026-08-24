@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useRealtimeTable } from "../hooks/useRealtimeTable";
 import { useApiData, resolveApiPath } from "../hooks/useApiData";
 
-type NavId = "today" | "queue" | "arrivals" | "procurement" | "payments" | "prices" | "settings";
+type NavId = "today" | "queue" | "arrivals" | "procurement" | "payments" | "prices" | "trust_score" | "settings";
 
 // --- State Models ---
 type Farmer = { token: string; name: string; village?: string; crop: string; qty: number; grade: string; amount: number; status: string; eta?: string };
@@ -55,16 +55,31 @@ const INITIAL_WAITING = [
 ];
 
 const INITIAL_LEDGER = [
-  { token: "T-041", name: "Ramesh Yadav", crop: "Wheat", qty: 42, grade: "A", amount: 98700, status: "Completed" },
-  { token: "T-042", name: "Sunita Devi", crop: "Soybean", qty: 28, grade: "B", amount: 58800, status: "Completed" },
-  { token: "T-043", name: "Mohan Patel", crop: "Wheat", qty: 65, grade: "A", amount: 152750, status: "Pending" },
-  { token: "T-044", name: "Kavita Verma", crop: "Maize", qty: 33, grade: "B", amount: 69300, status: "Processing" },
-  { token: "T-045", name: "Suresh Rawat", crop: "Wheat", qty: 51, grade: "C", amount: 94350, status: "Completed" },
+  { token: "T-035", name: "Arjun Tiwari",  crop: "Wheat",   qty: 38, grade: "A", amount:  89300, status: "Paid" },
+  { token: "T-036", name: "Meena Kumari",  crop: "Soybean", qty: 45, grade: "A", amount: 189000, status: "Paid" },
+  { token: "T-037", name: "Ravi Shankar",  crop: "Wheat",   qty: 60, grade: "B", amount: 126000, status: "Completed" },
+  { token: "T-038", name: "Anita Patel",   crop: "Maize",   qty: 29, grade: "A", amount:  68150, status: "Completed" },
+  { token: "T-039", name: "Vijay Singh",   crop: "Wheat",   qty: 55, grade: "C", amount: 101750, status: "Completed" },
+  { token: "T-040", name: "Pushpa Bai",    crop: "Soybean", qty: 40, grade: "B", amount: 168000, status: "Completed" },
+  { token: "T-041", name: "Ramesh Yadav",  crop: "Wheat",   qty: 42, grade: "A", amount:  98700, status: "Completed" },
+  { token: "T-042", name: "Sunita Devi",   crop: "Soybean", qty: 28, grade: "B", amount:  58800, status: "Completed" },
+  { token: "T-043", name: "Mohan Patel",   crop: "Wheat",   qty: 65, grade: "A", amount: 152750, status: "Pending" },
+  { token: "T-044", name: "Kavita Verma",  crop: "Maize",   qty: 33, grade: "B", amount:  69300, status: "Processing" },
+  { token: "T-045", name: "Suresh Rawat",  crop: "Wheat",   qty: 51, grade: "C", amount:  94350, status: "Pending" },
+  { token: "T-046", name: "Govind Singh",  crop: "Wheat",   qty: 48, grade: "A", amount: 112800, status: "Pending" },
 ];
 
 const INITIAL_ARRIVALS = [
-  { token: "T-052", name: "Govind Singh", village: "Sehore", time: "14:45", status: "Expected" },
-  { token: "T-053", name: "Lata Bai", village: "Ashta", time: "15:10", status: "Expected" },
+  { token: "T-047", name: "Dinesh Kumar",  village: "Sehore",       time: "08:30", status: "Arrived" },
+  { token: "T-048", name: "Ramesh Yadav",  village: "Hoshangabad",  time: "08:55", status: "Arrived" },
+  { token: "T-049", name: "Sunita Devi",   village: "Betul",        time: "09:20", status: "Arrived" },
+  { token: "T-050", name: "Mohan Patel",   village: "Narsinghpur",  time: "09:45", status: "Arrived" },
+  { token: "T-051", name: "Kavita Verma",  village: "Raisen",       time: "10:15", status: "Arrived" },
+  { token: "T-052", name: "Govind Singh",  village: "Sehore",       time: "13:00", status: "Arrived" },
+  { token: "T-053", name: "Lata Bai",      village: "Ashta",        time: "13:30", status: "Arrived" },
+  { token: "T-054", name: "Suresh Rawat",  village: "Hoshangabad",  time: "14:10", status: "Expected" },
+  { token: "T-055", name: "Priya Sharma",  village: "Narsinghpur",  time: "14:45", status: "Expected" },
+  { token: "T-056", name: "Bharat Yadav",  village: "Betul",        time: "15:20", status: "Expected" },
 ];
 
 const MSP: Record<string, number> = { A: 2350, B: 2100, C: 1850 };
@@ -77,6 +92,7 @@ const IconProcure = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="non
 const IconPayments = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>;
 const IconPrices = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>;
 const IconSettings = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>;
+const IconTrustScore = () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>;
 const IconWheat = () => <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22V12" /><path d="M12 12c0-4 4-8 4-8s0 4-4 4" /><path d="M12 12c0-4-4-8-4-8s0 4 4 4" /><path d="M12 17c0-3 3-5 3-5s0 3-3 3" /><path d="M12 17c0-3-3-5-3-5s0 3 3 3" /></svg>;
 
 const NAV: { id: NavId; label: string; icon: React.ReactNode }[] = [
@@ -86,6 +102,7 @@ const NAV: { id: NavId; label: string; icon: React.ReactNode }[] = [
   { id: "procurement", label: "Procurement", icon: <IconProcure /> },
   { id: "payments", label: "Payments", icon: <IconPayments /> },
   { id: "prices", label: "Mandi Prices", icon: <IconPrices /> },
+  { id: "trust_score", label: "Trust Score", icon: <IconTrustScore /> },
   { id: "settings", label: "Settings", icon: <IconSettings /> },
 ];
 
@@ -94,9 +111,9 @@ function StatusChip({ status }: { status: string }) {
     Completed: "bg-green-50 text-green-700 border-green-500/30 dark:bg-green-900/30 dark:text-green-400 dark:border-green-500/30",
     Paid: "bg-green-50 text-green-700 border-green-500/30 dark:bg-green-900/30 dark:text-green-400 dark:border-green-500/30",
     Pending: "bg-amber-50 text-amber-700 border-amber-500/30 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-500/30",
-    Processing: "bg-blue-50 text-blue-700 border-blue-500/30 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-500/30",
+    Processing: "bg-blue-50 text-blue-700 border-government-primary/30 dark:bg-blue-900/30 dark:text-blue-400 dark:border-government-primary/30",
     Expected: "bg-slate-100 text-slate-600 border-slate-300 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-600",
-    Arrived: "bg-blue-50 text-blue-700 border-blue-500/30 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-500/30",
+    Arrived: "bg-blue-50 text-blue-700 border-government-primary/30 dark:bg-blue-900/30 dark:text-blue-400 dark:border-government-primary/30",
   };
   const dots: Record<string, string> = {
     Completed: "bg-green-500", Paid: "bg-green-500", Pending: "bg-amber-500", Processing: "bg-blue-500", Expected: "bg-slate-400", Arrived: "bg-blue-500"
@@ -237,6 +254,7 @@ export default function App() {
     procurement: { title: "Procurement Entry", sub: "Record crop purchase details for the current token" },
     payments: { title: "Payments & DBT", sub: "Direct benefit transfer status · Season 2025–26" },
     prices: { title: "Mandi Prices", sub: "Live MSP and market rates" },
+  trust_score: { title: "Trust Score", sub: "Farmer credibility and procurement history · Sehore Mandi" },
     settings: { title: "Settings", sub: "System preferences and configurations" },
   };
 
@@ -262,7 +280,7 @@ export default function App() {
         <div className="p-3 pb-2">
           <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2.5 border border-blue-100 dark:border-blue-900/50">
             <div className="text-[10px] font-semibold text-blue-800 dark:text-blue-400 uppercase tracking-widest">Mandal</div>
-            <div className="text-[13px] font-medium text-blue-950 dark:text-blue-300 mt-0.5">Sehore, MP</div>
+            <div className="text-[13px] font-medium text-government-text dark:text-emerald-400 mt-0.5">Sehore, MP</div>
             <div className="text-[11px] text-blue-500 dark:text-blue-500/80 mt-0.5">Season 2025–26</div>
           </div>
         </div>
@@ -328,6 +346,7 @@ export default function App() {
           {active === "arrivals" && <ArrivalsScreen arrivals={arrivals} onArrive={handleMarkArrived} />}
           {active === "payments" && <PaymentsScreen ledger={ledger} onPay={handleTriggerPayment} />}
           {active === "prices" && <PricesScreen />}
+    {active === "trust_score" && <TrustScoreScreen />}
           {active === "settings" && <SettingsScreen theme={theme} setTheme={setTheme} />}
         </main>
       </div>
@@ -342,7 +361,7 @@ function StatCard({ label, value, sub, colorClass }: any) {
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm transition-colors">
       <div className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">{label}</div>
       <div className="text-[28px] font-bold text-slate-900 dark:text-white mt-1.5 tracking-tight leading-none">{value}</div>
-      <div className={`text-xs mt-1.5 font-medium ${colorClass}`}>{sub}</div>
+      <div className={`text-caption mt-1.5 font-medium ${colorClass}`}>{sub}</div>
     </div>
   );
 }
@@ -354,7 +373,7 @@ function TodayScreen({ ledger, queueLength }: any) {
   return (
     <div className="flex flex-col gap-5">
       <div className="grid grid-cols-4 gap-4">
-        <StatCard label="Total Farmers" value="284" sub="↑ 18 from yesterday" colorClass="text-green-600 dark:text-green-400" />
+        <StatCard label="Scheduled Today" value="284" sub="↑ 18 from yesterday · Sehore Mandi" colorClass="text-green-600 dark:text-green-400" />
         <StatCard label="In Queue" value={queueLength.toString()} sub="Avg. 6.4 min / farmer" colorClass="text-blue-700 dark:text-blue-400" />
         <StatCard label="Completed" value={completed.toString()} sub={`${(completed/284*100).toFixed(1)}% of daily target`} colorClass="text-green-600 dark:text-green-400" />
         <StatCard label="Pending Payment" value={`₹${(pendingAmt/100000).toFixed(1)}L`} sub="Awaiting DBT" colorClass="text-amber-600 dark:text-amber-500" />
@@ -366,7 +385,7 @@ function TodayScreen({ ledger, queueLength }: any) {
             <div className="font-semibold text-[14px] text-slate-900 dark:text-white">Procurement Ledger</div>
             <div className="text-[12px] text-slate-500 dark:text-slate-400 mt-0.5">Recent transactions — 23 Aug 2026</div>
           </div>
-          <button className="text-xs font-medium text-blue-900 dark:text-blue-400 px-3 py-1.5 border border-blue-200 dark:border-blue-900/50 rounded-md bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors">View All →</button>
+          <button className="text-xs font-medium text-blue-900 dark:text-blue-400 px-3 py-1.5 border border-blue-200 dark:border-blue-900/50 rounded-md bg-blue-50 dark:bg-blue-900/20 hover:bg-emerald-100 dark:hover:bg-blue-900/40 transition-colors">View All →</button>
         </div>
         <table className="w-full border-collapse">
           <thead>
@@ -436,7 +455,7 @@ function QueueScreen({ waiting, serving, onCallNext }: any) {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-bold text-blue-900 dark:text-blue-400 tabular-nums">{w.token}</span>
-                  {i === 0 && <span className="text-[10px] font-semibold bg-blue-50 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 rounded px-1 border border-blue-200 dark:border-blue-800">Next</span>}
+                  {i === 0 && <span className="text-[10px] font-semibold bg-blue-50 dark:bg-blue-900/40 text-blue-800 dark:text-emerald-400 rounded px-1 border border-blue-200 dark:border-blue-800">Next</span>}
                 </div>
                 <div className="text-[13px] font-medium text-slate-900 dark:text-slate-200 mt-0.5">{w.name}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{w.village}</div>
@@ -478,7 +497,7 @@ function ProcurementScreen({ serving, onProcure, recent }: any) {
           <div className="mb-5">
             <label className="block text-[13px] font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Quantity (Quintals)</label>
             <input type="number" value={qty} onChange={(e) => setQty(e.target.value)} placeholder="e.g., 50"
-              className="w-full p-2.5 px-3.5 border border-slate-300 dark:border-slate-700 rounded-lg text-[15px] font-medium text-slate-900 dark:text-white bg-white dark:bg-slate-950 focus:border-blue-900 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-900/10 dark:focus:ring-blue-500/20 outline-none transition-all" />
+              className="w-full p-2.5 px-3.5 border border-slate-300 dark:border-slate-700 rounded-lg text-[15px] font-medium text-slate-900 dark:text-white bg-white dark:bg-slate-950 focus:border-blue-900 dark:focus:border-blue-500 focus:ring-2 focus:ring-government-primary/10 dark:focus:ring-blue-500/20 outline-none transition-all" />
           </div>
           <div className="mb-6">
             <label className="block text-[13px] font-semibold text-slate-700 dark:text-slate-300 mb-2">Quality Grade</label>
@@ -487,7 +506,7 @@ function ProcurementScreen({ serving, onProcure, recent }: any) {
                 <button key={g} onClick={() => setGrade(g)}
                   className={`p-3.5 rounded-lg border text-center transition-all ${grade === g ? 'bg-blue-50 border-blue-400 dark:bg-blue-900/30 dark:border-blue-500' : 'bg-slate-50 border-slate-200 dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'}`}>
                   <div className={`text-2xl font-extrabold ${grade === g ? 'text-blue-900 dark:text-blue-400' : 'text-slate-400'}`}>{g}</div>
-                  <div className={`text-xs font-semibold mt-1 ${grade === g ? 'text-blue-700 dark:text-blue-300' : 'text-slate-300 dark:text-slate-500'}`}>₹{MSP[g]}/q</div>
+                  <div className={`text-xs font-semibold mt-1 ${grade === g ? 'text-blue-700 dark:text-emerald-400' : 'text-slate-300 dark:text-slate-500'}`}>₹{MSP[g]}/q</div>
                 </button>
               ))}
             </div>
@@ -547,7 +566,7 @@ function ArrivalsScreen({ arrivals, onArrive }: any) {
               <td className="py-3 px-5"><StatusChip status={a.status} /></td>
               <td className="py-3 px-5 text-right">
                 {a.status === "Expected" && (
-                  <button onClick={() => onArrive(a.token)} className="text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800 px-3 py-1.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/50">
+                  <button onClick={() => onArrive(a.token)} className="text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800 px-3 py-1.5 rounded hover:bg-emerald-100 dark:hover:bg-blue-900/50">
                     Mark Arrived
                   </button>
                 )}
@@ -596,6 +615,38 @@ function PaymentsScreen({ ledger, onPay }: any) {
   );
 }
 
+
+
+// ── Mock 30-day price history (realistic Rabi 2026 wheat, MP mandis) ─────────
+// Chart fallback when the Agmarknet API has not returned data.
+function generateMockHistory() {
+  const base = 2300;
+  const noise = [0,12,-8,20,-5,15,8,-12,25,3,-10,18,6,-4,22,10,-6,14,2,-15,20,8,-3,16,5,-8,19,11,-2,17];
+  return noise.map((n, i) => {
+    const d = new Date(2026, 6, 25); d.setDate(d.getDate() + i);
+    const modal = Math.round(base + n + i * 1.8);
+    const spread = Math.round(180 + noise[(i + 5) % 30] * 0.5);
+    return {
+      price_date: d.toISOString().slice(0, 10),
+      modal_price: modal,
+      min_price: modal - Math.round(spread / 2),
+      max_price: modal + Math.round(spread / 2),
+      moving_avg_7d: Math.round(modal - 6 + i * 0.5),
+      moving_avg_30d: Math.round(base + i * 1.2),
+      spread,
+    };
+  });
+}
+const MOCK_HISTORY = generateMockHistory();
+const MOCK_MARKETS = [
+  { market: "Sehore Main Mandi",          district: "Sehore",        state: "Madhya Pradesh", modal_price: 2348, change_pct:  1.2 },
+  { market: "Karnal New Anaj Mandi",      district: "Karnal",        state: "Haryana",        modal_price: 2322, change_pct:  0.8 },
+  { market: "Hoshangabad Mandi",          district: "Narmadapuram",  state: "Madhya Pradesh", modal_price: 2295, change_pct: -0.4 },
+  { market: "Ludhiana Grain Market",      district: "Ludhiana",      state: "Punjab",         modal_price: 2380, change_pct:  1.5 },
+  { market: "Narsinghpur Mandi",          district: "Narsinghpur",   state: "Madhya Pradesh", modal_price: 2260, change_pct:  0.3 },
+  { market: "Raisen Agricultural Market", district: "Raisen",        state: "Madhya Pradesh", modal_price: 2285, change_pct: -0.2 },
+];
+
 function PricesScreen() {
   const [selectedCommodity, setSelectedCommodity] = useState<string>('Wheat');
   const [selectedState, setSelectedState] = useState<string>('All');
@@ -613,7 +664,8 @@ function PricesScreen() {
   const historyPath = `/mandi-prices/history?commodity=${encodeURIComponent(selectedCommodity)}${
     selectedState !== 'All' ? `&state=${encodeURIComponent(selectedState)}` : ''
   }&days=30`;
-  const { data: historyData } = useApiData<any[]>(historyPath);
+  const { data: historyDataRaw } = useApiData<any[]>(historyPath);
+ const historyData = (historyDataRaw && historyDataRaw.length > 0) ? historyDataRaw : MOCK_HISTORY;
 
   const commodities = filtersData?.commodities || [
     'Wheat',
@@ -758,7 +810,8 @@ function PricesScreen() {
     setHoverSpreadPoint(null);
   };
 
-  const filteredMarkets = (priceData?.markets || []).filter((m: any) => {
+  const allMarkets = (priceData?.markets && priceData.markets.length > 0) ? priceData.markets : MOCK_MARKETS;
+ const filteredMarkets = allMarkets.filter((m: any) => {
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -938,7 +991,7 @@ function PricesScreen() {
                 className="w-full bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-900 dark:text-white"
               >
                 {commodities.map((c) => (
-                  <option key={c} value={c}>🌾 {c}</option>
+                  <option key={c} value={c}>{c}</option>
                 ))}
               </select>
             </div>
@@ -950,7 +1003,7 @@ function PricesScreen() {
                 className="w-full bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-900 dark:text-white"
               >
                 {states.map((s) => (
-                  <option key={s} value={s}>📍 {s}</option>
+                  <option key={s} value={s}>{s}</option>
                 ))}
               </select>
             </div>
@@ -1112,9 +1165,9 @@ function PricesScreen() {
                 </div>
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="flex items-center gap-1.5 text-slate-300">
-                    <span className="w-2 h-0.5 rounded bg-blue-400"></span> 7D Moving Avg:
+                    <span className="w-2 h-0.5 rounded bg-emerald-500"></span> 7D Moving Avg:
                   </span>
-                  <span className="font-semibold text-blue-300 font-mono">
+                  <span className="font-semibold text-emerald-400 font-mono">
                     ₹{hoverPoint.moving_avg_7d.toLocaleString('en-IN')}
                   </span>
                 </div>
@@ -1178,7 +1231,7 @@ function PricesScreen() {
                       )
                       .join(' ')}`}
                     fill="none"
-                    stroke="#3B82F6"
+                    stroke="#2E7D32"
                     strokeWidth="2"
                   />
                   <path
@@ -1216,7 +1269,7 @@ function PricesScreen() {
                         cx={`${hoverXRatio * 700}`}
                         cy={`${getY(hoverPoint.moving_avg_7d)}`}
                         r="4"
-                        className="fill-blue-500 stroke-white dark:stroke-slate-900 stroke-2"
+                        className="fill-emerald-600 stroke-white dark:stroke-slate-900 stroke-2"
                       />
                     </>
                   )}
@@ -1537,6 +1590,78 @@ function PricesScreen() {
     </div>
   );
 }
+
+
+function TrustScoreScreen() {
+ const farmers = [
+  { token:"T-035", name:"Arjun Tiwari",  village:"Sehore",       visits:12, totalQty:420, grade:"A", reliability:96, status:"Verified" },
+  { token:"T-036", name:"Meena Kumari",  village:"Betul",         visits: 8, totalQty:310, grade:"A", reliability:92, status:"Verified" },
+  { token:"T-037", name:"Ravi Shankar",  village:"Hoshangabad",   visits:15, totalQty:580, grade:"B", reliability:88, status:"Verified" },
+  { token:"T-038", name:"Anita Patel",   village:"Narsinghpur",   visits: 5, totalQty:195, grade:"A", reliability:84, status:"Active" },
+  { token:"T-039", name:"Vijay Singh",   village:"Raisen",        visits: 3, totalQty:120, grade:"C", reliability:71, status:"Active" },
+  { token:"T-040", name:"Pushpa Bai",    village:"Ashta",         visits: 7, totalQty:250, grade:"B", reliability:79, status:"Active" },
+  { token:"T-041", name:"Ramesh Yadav",  village:"Hoshangabad",   visits:10, totalQty:380, grade:"A", reliability:90, status:"Verified" },
+  { token:"T-042", name:"Sunita Devi",   village:"Betul",         visits: 6, totalQty:200, grade:"B", reliability:76, status:"Active" },
+ ];
+ const rColor = (r: number) => r >= 90 ? "text-government-primary" : r >= 75 ? "text-amber-700" : "text-rose-600";
+ const rBg    = (r: number) => r >= 90 ? "bg-emerald-50 border-government-primary/30" : r >= 75 ? "bg-amber-50 border-amber-300" : "bg-rose-50 border-rose-300";
+ return (
+  <div className="flex flex-col gap-5">
+   <div className="grid grid-cols-3 gap-4">
+    {[
+     { label:"Verified Farmers", value:"4",  sub:"90%+ reliability score" },
+     { label:"Avg Reliability",  value:"84%",sub:"Across 8 active farmers" },
+     { label:"Total Season Visits", value:"66", sub:"Repeat procurement visits" },
+    ].map(s => (
+     <div key={s.label} className="bg-white border border-government-border rounded p-5">
+      <div className="text-eyebrow uppercase text-government-text-secondary tracking-widest mb-2">{s.label}</div>
+      <div className="text-stat font-bold text-government-primary leading-none">{s.value}</div>
+      <div className="text-caption text-government-text-secondary mt-1">{s.sub}</div>
+     </div>
+    ))}
+   </div>
+   <div className="bg-white border border-government-border rounded overflow-hidden">
+    <div className="p-4 px-5 border-b border-government-border">
+     <div className="font-semibold text-[14px] text-government-text">Farmer Trust Registry</div>
+     <div className="text-[12px] text-government-text-secondary mt-0.5">Procurement history and reliability scores · Season 2025–26</div>
+    </div>
+    <table className="w-full">
+     <thead>
+      <tr className="bg-government-bg text-left border-b border-government-border">
+       {["Token","Farmer","Village","Visits","Total Qty (q)","Top Grade","Reliability","Status"].map(h => (
+        <th key={h} className="py-2.5 px-5 text-[11px] font-semibold text-government-text-secondary uppercase tracking-wider">{h}</th>
+       ))}
+      </tr>
+     </thead>
+     <tbody>
+      {farmers.map((f, i) => (
+       <tr key={i} className="border-b border-government-border/40 hover:bg-government-bg transition-colors last:border-0">
+        <td className="py-3 px-5 text-[13px] font-bold text-government-primary tabular-nums">{f.token}</td>
+        <td className="py-3 px-5 text-[13px] font-medium text-government-text">{f.name}</td>
+        <td className="py-3 px-5 text-[13px] text-government-text-secondary">{f.village}</td>
+        <td className="py-3 px-5 text-[13px] text-government-text-secondary tabular-nums">{f.visits}</td>
+        <td className="py-3 px-5 text-[13px] text-government-text-secondary tabular-nums">{f.totalQty}</td>
+        <td className="py-3 px-5">
+         <span className={`text-xs font-bold px-2 py-0.5 rounded ${f.grade==='A'?'text-green-700 bg-green-50':f.grade==='B'?'text-amber-800 bg-amber-50':'text-purple-700 bg-purple-50'}`}>{f.grade}</span>
+        </td>
+        <td className="py-3 px-5">
+         <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border text-xs font-bold ${rBg(f.reliability)}`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${f.reliability>=90?'bg-government-primary':f.reliability>=75?'bg-amber-500':'bg-rose-500'}`} />
+          <span className={rColor(f.reliability)}>{f.reliability}%</span>
+         </span>
+        </td>
+        <td className="py-3 px-5">
+         <span className={`text-xs font-semibold px-2 py-0.5 rounded ${f.status==='Verified'?'text-government-primary bg-emerald-50 border border-government-primary/20':'text-government-text-secondary bg-government-bg border border-government-border'}`}>{f.status}</span>
+        </td>
+       </tr>
+      ))}
+     </tbody>
+    </table>
+   </div>
+  </div>
+ );
+}
+
 
 function SettingsScreen({ theme, setTheme }: any) {
   return (
