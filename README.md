@@ -1,1529 +1,624 @@
-🌾 KisanSetu — AI-Powered Digital Procurement Assistant for Farmers
+<div align="center">
 
-<p align="center">
-  <strong>Voice-first farmer assistance • Digital procurement workflows • Live queue visibility • Payment tracking • Verifiable procurement proofs</strong>
-</p>
+# 🌾 KisanCall
 
-<p align="center">
-  <a href="#-overview">Overview</a> •
-  <a href="#-problem">Problem</a> •
-  <a href="#-solution">Solution</a> •
-  <a href="#-architecture">Architecture</a> •
-  <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-project-structure">Project Structure</a> •
-  <a href="#-development">Development</a>
-</p>
+### Voice-First Procurement Coordination with a Verifiable Proof Layer
 
-<p align="center">
-  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white" alt="Node.js">
-  <img src="https://img.shields.io/badge/Turborepo-monorepo-EF4444?logo=turborepo&logoColor=white" alt="Turborepo">
-  <img src="https://img.shields.io/badge/pnpm-workspaces-F69220?logo=pnpm&logoColor=white" alt="pnpm">
-  <img src="https://img.shields.io/badge/Fastify-backend-000000?logo=fastify&logoColor=white" alt="Fastify">
-  <img src="https://img.shields.io/badge/Supabase-Postgres%20%2B%20Auth%20%2B%20Realtime-3FCF8E?logo=supabase&logoColor=white" alt="Supabase">
-  <img src="https://img.shields.io/badge/pgvector-vector%20search-336791?logo=postgresql&logoColor=white" alt="pgvector">
-  <img src="https://img.shields.io/badge/Expo-React%20Native-000020?logo=expo&logoColor=white" alt="Expo">
-  <img src="https://img.shields.io/badge/Next.js-App%20Router-000000?logo=next.js&logoColor=white" alt="Next.js">
-  <img src="https://img.shields.io/badge/Tailwind%20CSS-UI-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
-  <img src="https://img.shields.io/badge/Solidity-Smart%20Contracts-363636?logo=solidity&logoColor=white" alt="Solidity">
-  <img src="https://img.shields.io/badge/Hardhat-EVM%20tooling-FFF100?logo=hardhat&logoColor=black" alt="Hardhat">
-</p>
+*"Know the price. Know your slot. Know your queue. Know your payment. Have proof of what happened."*
 
-📌 What is KisanSetu?
+Built for **Smart India Hackathon 2026** · Problem Statement **26032** · Department of Consumer Affairs
 
-KisanSetu is a voice-first digital procurement assistant designed to make agricultural procurement easier and more transparent for farmers.
+![SIH2026](https://img.shields.io/badge/SIH-2026-orange?style=for-the-badge)
+![Team](https://img.shields.io/badge/Team-TeenTitans-blueviolet?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-In%20Development-yellow?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+</div>
 
-A farmer should not need to navigate complicated applications, repeatedly visit a procurement center, or depend on someone else just to answer basic questions such as:
+---
 
-When is my procurement slot?
+## 📋 Problem Statement Details
 
-What is my position in the queue?
+| Field | Detail |
+|---|---|
+| **Problem Statement ID** | 26032 |
+| **Title** | Farmers often face long waiting times, lack of information regarding procurement schedules, and uncertainty about procurement status. |
+| **Organization** | Ministry of Consumer Affairs, Food & Public Distribution |
+| **Department** | Department of Consumer Affairs (DoCA) |
+| **Category** | Software |
+| **Theme** | Heritage & Culture |
 
-When should I arrive?
+**Expected solution — a platform that:**
+- Enables farmer registration and slot booking
+- Provides real-time queue management
+- Sends SMS/app notifications
+- Tracks procurement and payment status
+- Reduces congestion and waiting time at procurement centres
 
-What is the latest available mandi price?
+---
 
-What is the status of my procurement?
+## 📑 Table of Contents
 
-Has my payment been processed?
+1. [About the Project](#-about-the-project)
+2. [The Problem](#-the-problem)
+3. [What We're Not Claiming](#-what-were-not-claiming)
+4. [Our Solution & USP](#-our-solution--usp)
+5. [Feature Set](#-feature-set)
+6. [User Personas](#-user-personas)
+7. [End-to-End Farmer Journey](#-end-to-end-farmer-journey)
+8. [Tech Stack](#-tech-stack)
+9. [System Architecture](#-system-architecture)
+10. [Data Model](#-data-model)
+11. [Core API Endpoints](#-core-api-endpoints)
+12. [Voice AI Engineering](#-voice-ai-engineering)
+13. [AgroChain — The Proof Layer](#-agrochain--the-proof-layer)
+14. [Security & Privacy](#-security--privacy)
+15. [Repository Structure](#-repository-structure)
+16. [Getting Started](#-getting-started)
+17. [Roadmap](#-roadmap)
+18. [Impact Metrics](#-impact-metrics)
+19. [Team](#-team)
 
-KisanSetu brings these interactions into one connected system.
+---
 
-The farmer can interact through a voice interface or mobile application, while procurement staff get a dedicated dashboard. Important procurement and payment events can additionally be anchored through AgroChain on a Shardeum EVM testnet to provide a tamper-evident proof trail.
+## 🎯 About the Project
 
-In one line:
-KisanSetu connects farmers, procurement centers, real-time operational data, AI assistance, and verifiable event proofs in one platform.
+**KisanCall** is a voice-first procurement coordination platform for agricultural mandis and government procurement centres. It gives every farmer — including those without a smartphone or reliable data connection — a single conversational way to know their registration status, their procurement slot, their live position in the queue, the day's government-reported mandi price, and the status of their payment, through a **phone call, SMS, or a lightweight app.**
 
-🎯 The Problem
+Underneath the conversational layer sits **AgroChain**, a narrow blockchain-anchored proof layer that timestamps and hashes the key events of a farmer's transaction — price agreed, quantity verified, procurement completed, payment confirmed — so that once a transaction is recorded, it cannot be silently altered. AgroChain never stores personal or financial data on-chain; it only anchors a cryptographic fingerprint of each critical event.
 
-Agricultural procurement involves multiple actors and multiple stages:
+> **The core idea in one line:** KisanCall tells the farmer what is happening; AgroChain proves what happened.
 
-Farmer
-  ↓
-Registration
-  ↓
-Procurement Slot
-  ↓
-Arrival
-  ↓
-Queue
-  ↓
-Procurement
-  ↓
-Payment
+The problem isn't that Indian agriculture lacks digital systems — procurement portals, mandi trading platforms, and government dashboards already exist. The problem is that the farmer's *experience* of those systems is fragmented, requires literacy and connectivity to use, and gives no way to independently verify that a transaction record is authentic. KisanCall closes that last-mile trust and accessibility gap by sitting **above** existing procurement infrastructure, not replacing it.
 
-In a fragmented workflow, farmers may have limited visibility into what is happening after registration.
+| Dimension | Assessment |
+|---|---|
+| Core users | Smallholder and marginal farmers registering for government/mandi procurement |
+| Primary interface | Outbound/inbound AI voice call, SMS fallback, lightweight mobile & web app |
+| Trust layer | AgroChain — selective blockchain anchoring of transaction events |
+| Deployment model | Sits above existing procurement systems; doesn't require replacing them |
+| Languages at launch | Hindi and English, with a roadmap to major regional languages |
+| Differentiator | One conversational journey across registration, slot, queue, price, payment, and proof |
 
-Common friction points
+---
 
-Problem
+## 🚜 The Problem
 
-Impact
+### The Real-World Workflow
 
-Farmers do not know their slot
+A farmer engaging with a procurement centre typically moves through the following stages, regardless of which state or scheme is involved:
 
-Unnecessary visits and waiting
+1. Procurement window is announced by the government or procurement agency
+2. Farmer completes registration, KYC, and crop/land verification
+3. Farmer is allotted a procurement centre, token, or slot
+4. Farmer travels to the centre — often without a reliable idea of timing
+5. Gate entry and arrival registration
+6. Waiting in queue, weighing, and quality assessment
+7. Procurement transaction and lot/bill entry
+8. Payment processing
+9. Farmer repeatedly checks or travels back just to confirm payment status
 
-Queue visibility is poor
+Every one of these steps generates information that's useful to the farmer — but today that information is scattered across portals, SMS, staff conversations, and physical visits. **The farmer bears the cost of stitching it together.**
 
-Congestion and uncertainty
+### Farmer Pain Points
 
-Information is scattered
+| Pain point | What the farmer actually needs | How KisanCall responds |
+|---|---|---|
+| Uncertain arrival time | A clear slot and a useful arrival window | Slot confirmation call/SMS plus a reminder before the window |
+| Long physical waits | Live visibility of queue position | Real-time queue position and estimated wait time, updated by voice on demand |
+| Sudden schedule changes | Immediate notice without having to check anything | Proactive outbound call or SMS the moment a change is recorded |
+| Price uncertainty | Current, dated, sourced mandi reference price | Government-reported price read out with date and source |
+| Payment uncertainty | A plain-language status, not a portal screen | AI explains payment status in the farmer's own language |
+| Low smartphone comfort | No new app or workflow to learn | Phone call is the primary channel; app is optional |
+| Poor rural connectivity | A channel that still works with 2G or no data | Voice and SMS require no data connection |
+| Trust in digital records | Evidence that a transaction was actually recorded as agreed | A transaction reference the farmer can quote back, anchored via AgroChain |
 
-Farmers depend on staff or repeated calls
+---
 
-Smartphone-first systems exclude some users
+## ⚖️ What We're Not Claiming
 
-Lower accessibility
+This project deliberately avoids overstating the problem. Digital procurement infrastructure already exists in India (e-NAM, state portals like Punjab's Anaaj Kharid, MP's e-Uparjan, Haryana's Meri Fasal Mera Byora), mandi trading platforms already support electronic payments and lot tracking, and government-backed multilingual voice assistants for farmers are already emerging.
 
-Payment status is unclear
+**KisanCall is not positioned as the first digital tool for farmers** — it is positioned as a focused **coordination and trust layer** for the procurement journey specifically, built to be voice-first and independently verifiable.
 
-Anxiety and repeated follow-ups
+---
 
-Operational staff lack one unified view
+## 💡 Our Solution & USP
 
-Difficult coordination
+KisanCall is built around three ideas held together tightly:
 
-Important events can be difficult to independently verify
+- **Voice as the primary interface, not an add-on** — a farmer can complete every core task by receiving or making a phone call
+- **Proactive communication** — the system calls the farmer *before* the farmer has to ask a question
+- **Verifiable proof** — the outcome of a procurement transaction is anchored on-chain so it cannot be silently altered after the fact
 
-Lower transparency
+| USP | Why it matters |
+|---|---|
+| Single conversational journey | Registration, slot, queue, price, and payment handled in one flow instead of five disconnected systems |
+| Smartphone-optional by design | The primary channel is a phone call; the app and web dashboard are conveniences, not requirements |
+| Proactive, not reactive | System reaches out automatically at every meaningful status change — no need to repeatedly check or travel |
+| Tamper-evident transaction proof | Selected events are hashed and anchored on-chain, giving a durable, independently checkable reference — without exposing personal or bank data |
+| Grounded, hallucination-resistant AI | The voice agent only ever answers from live backend data through tool calls; it never invents a price, queue position, or payment status |
+| Natural-language, zero-menu voice UX | Farmers ask in their own words ("mera number kab aayega?") instead of navigating a keypad-driven IVR tree |
 
-KisanSetu addresses these problems by creating a single connected operational flow.
+> *KisanCall is a procurement-centre coordination and trust layer for farmers — reachable by a simple phone call, proactive by default, and backed by tamper-evident proof of what actually happened.*
 
-💡 The Solution
+---
 
-KisanSetu has four major layers:
+## ✨ Feature Set
 
-1. 📞 Farmer Interaction
+<details>
+<summary><b>👨‍🌾 Farmer-Facing Features</b></summary>
 
-A farmer can interact with KisanSetu through voice.
+- Voice and app-based registration, with staff-assisted correction for low-connectivity users
+- Slot booking and confirmation with automatic reminder calls/SMS ahead of the arrival window
+- Live queue position and estimated wait time, available on demand by call or in-app
+- Daily government-reported mandi reference price, always read with date and source
+- Procurement status tracking through plain-language stages: **Booked → Arrived → In Queue → Procured → Payment Processing → Paid**
+- Payment status explained conversationally, not just displayed as a code
+- On-demand transaction/proof reference the farmer can request at any time
+- Multilingual voice support, starting with Hindi and English
+- SMS fallback for every major status update
 
-Example:
+</details>
 
-Farmer: "Mera slot kab hai?"
+<details>
+<summary><b>🧑‍💼 Staff / Procurement-Centre Features</b></summary>
 
-The system identifies the intent, retrieves the relevant information, and responds.
+- Daily farmer list with pending registrations and slot capacity view
+- Arrival marking and live queue management
+- Procurement and quality-verification entry
+- Payment status updates with an auditable trail
+- Call log and outcome tracking, including farmers who couldn't be reached
+- Manual override and correction tools, all logged for audit
+- Direct view of the blockchain proof reference tied to each transaction
 
-2. 🧠 AI + Knowledge Layer
+</details>
 
-The AI understands the farmer's request and determines what information is required.
+<details>
+<summary><b>🎙️ AI Voice Agent Features</b></summary>
 
-For knowledge retrieval, the project uses:
+- Outbound proactive calling triggered by backend status changes
+- Inbound call handling for farmer-initiated queries
+- **Barge-in support** — if the farmer starts speaking while the agent is talking, the agent stops immediately and listens
+- Tool-first answers — every factual response is retrieved from a backend tool call, never generated from memory
+- Graceful fallback to keypad input or human staff escalation after repeated recognition failures
+- Compact, per-call context — the agent is given only the exact facts needed for the current conversation
 
-Supabase PostgreSQL + pgvector
+</details>
 
-instead of a separate vector database.
+<details>
+<summary><b>⛓️ AgroChain Proof-Layer Features</b></summary>
 
-This lets the system keep transactional data and future semantic knowledge retrieval within the same PostgreSQL platform.
+- Event-based anchoring for six lifecycle milestones: procurement created, quantity verified, price confirmed, procurement completed, payment initiated, payment confirmed
+- Only a hash of the canonicalised event payload and its metadata is written on-chain — never personal or bank data
+- Every anchored event returns a transaction reference the farmer can be given and can independently ask about
+- Asynchronous, queued writes so a temporary blockchain outage never blocks the operational flow
 
-3. 🖥️ Operational Layer
+</details>
 
-Staff can use dashboards to monitor:
+---
 
-Today's farmers
+## 👥 User Personas
 
-Arrivals
+| Persona | Profile | Needs |
+|---|---|---|
+| **Ramesh** — Smallholder Farmer, 47 | Owns 2 acres, grows wheat and paddy, uses a basic keypad or shared smartphone, prefers Hindi | Wants to know when to show up and when he'll get paid, without travelling to ask. Primary channel: phone call |
+| **Sunita** — Smartphone Farmer, 32 | Comfortable with WhatsApp and basic apps, occasional field connectivity issues | Uses the app to check status quickly, but appreciates that a call still comes through when something changes |
+| **Operator** — Centre Staff | Manages arrivals, queue, and procurement entry for 100–300 farmers a day | A fast, low-friction dashboard and a way to correct mistakes without losing the audit trail |
+| **Supervisor / Admin** | Oversees multiple operators | Visibility into missed calls, queue bottlenecks, and payment delays across the day; configures slot capacity |
 
-Queue
+---
 
-Procurement
+## 🛤️ End-to-End Farmer Journey
 
-Payment processing
-
-Payment completion
-
-Operational status
-
-4. ⛓️ Proof Layer
-
-When important events occur, such as:
-
-PROCUREMENT_COMPLETED
-
-PAYMENT_CONFIRMED
-
-the future AgroChain service can create a canonical event payload, hash it, and anchor the proof on a Shardeum EVM testnet.
-
-The blockchain is not intended to store the entire farmer database.
-
-It acts as a proof/anchor layer.
-
-🔄 End-to-End User Journey
-
-flowchart TD
-    A["👨‍🌾 Farmer"] --> B{"Choose interaction"}
-    B -->|"📞 Voice"| C["KisanSetu Voice AI"]
-    B -->|"📱 App"| D["KisanSetu Mobile App"]
-
-    C --> E["Intent Recognition"]
-    D --> F["Backend API"]
-
-    E --> F["Backend API"]
-
-    F --> G["Supabase PostgreSQL"]
-
-    G --> H["Farmer / Slot / Queue / Procurement / Payment Data"]
-
-    F --> I["External Mandi Price Data"]
-
-    F --> J["Future AI Knowledge Retrieval"]
-    J --> K["pgvector"]
-
-    F --> L["Staff Dashboard"]
-
-    G --> M{"Important event?"}
-
-    M -->|"PROCUREMENT_COMPLETED"| N["AgroChain Proof Builder"]
-    M -->|"PAYMENT_CONFIRMED"| N
-
-    N --> O["Canonical Payload"]
-    O --> P["Event Hash"]
-    P --> Q["Shardeum EVM Testnet"]
-
-    C --> R["🔊 Voice Response"]
-    L --> S["📊 Staff Visibility"]
-
-🏗️ System Architecture
-
-flowchart LR
-    subgraph USERS["Users"]
-        Farmer["👨‍🌾 Farmer"]
-        Staff["👨‍💼 Procurement Staff"]
-    end
-
-    subgraph CLIENTS["Client Layer"]
-        Voice["📞 Voice AI"]
-        Mobile["📱 Expo Mobile App"]
-        StaffUI["🖥️ Staff Dashboard"]
-        Web["🌐 Farmer Web Fallback"]
-    end
-
-    subgraph CORE["KisanSetu Core"]
-        Backend["⚙️ Fastify + TypeScript"]
-        Auth["🔐 Supabase Auth"]
-        Realtime["⚡ Supabase Realtime"]
-    end
-
-    subgraph DATA["Supabase PostgreSQL"]
-        Relational["🗄️ Transactional Tables"]
-        Vector["🧠 pgvector Knowledge Layer"]
-    end
-
-    subgraph EXTERNAL["External Services"]
-        Mandi["🌾 Mandi / Data APIs"]
-        Telephony["☎️ Telephony"]
-        STT["🎙️ Speech-to-Text"]
-        LLM["🤖 LLM"]
-    end
-
-    subgraph PROOF["AgroChain"]
-        Builder["Canonical Payload + Hash"]
-        Contract["ProofRegistry.sol"]
-        Shardeum["⛓️ Shardeum EVM Testnet"]
-    end
-
-    Farmer --> Voice
-    Farmer --> Mobile
-    Farmer --> Web
-    Staff --> StaffUI
-
-    Voice --> Backend
-    Mobile --> Backend
-    Web --> Backend
-    StaffUI --> Backend
-
-    Backend --> Auth
-    Backend --> Realtime
-    Backend --> Relational
-    Backend --> Vector
-
-    Backend --> Mandi
-    Voice --> Telephony
-    Voice --> STT
-    Voice --> LLM
-
-    Relational --> Builder
-    Builder --> Contract
-    Contract --> Shardeum
-
-🧠 AI / RAG Architecture
-
-The project deliberately separates transactional truth from semantic knowledge retrieval.
-
-Transactional data
-
-Examples:
-
-Farmer records
-
-Slots
-
-Bookings
-
-Queue events
-
-Procurement
-
-Payments
-
-Calls
-
-These live in regular PostgreSQL tables.
-
-Knowledge data
-
-Examples:
-
-FAQs
-
-Procurement guidance
-
-Agricultural knowledge
-
-Reference information
-
-Future indexed text content
-
-These can be represented using embeddings in the knowledge_base table with pgvector.
-
-flowchart TD
-    Q["Farmer Question"] --> I["Intent Recognition"]
-    I --> T{"Needs structured data?"}
-
-    T -->|"Yes"| DB["PostgreSQL Transactional Data"]
-    T -->|"Knowledge retrieval"| E["Future Embedding Generation"]
-
-    E --> V["pgvector Similarity Search"]
-    V --> C["Relevant Knowledge Context"]
-
-    DB --> G["Response Generation"]
-    C --> G
-
-    G --> R["Hindi / English Voice Response"]
-
-Current status: the repository is scaffolded for this architecture. Actual embedding generation, retrieval, and RAG business logic are intentionally not part of the skeleton.
-
-⛓️ AgroChain Proof Architecture
-
-AgroChain is designed as a proof layer, not as the primary application database.
-
-sequenceDiagram
-    participant DB as Supabase PostgreSQL
-    participant API as KisanSetu Backend
-    participant PB as Proof Builder
-    participant SC as ProofRegistry.sol
-    participant SH as Shardeum
-
-    DB->>API: Important event occurs
-    API->>PB: Send canonical event payload
-    PB->>PB: Canonicalize payload
-    PB->>PB: Generate event hash
-    PB->>SC: recordProofEvent(eventHash, eventType)
-    SC->>SH: Store proof on-chain
-    SH-->>SC: Transaction confirmation
-    SC-->>PB: Proof transaction/reference
-    PB-->>API: Proof reference
-    API-->>DB: Store proof event reference
-
-Important design principle
-
-PostgreSQL
-    │
-    ├── Stores application state
-    ├── Stores farmer data
-    ├── Stores procurement/payment records
-    └── Stores proof-event metadata
-              │
-              ↓
-         AgroChain
-              │
-              └── Anchors event proof
-
-The blockchain is not a replacement for PostgreSQL.
-
-📊 Core Data Model
-
-The current schema is intentionally scaffolded and can be expanded by the team.
-
-erDiagram
-    FARMERS ||--o{ BOOKINGS : makes
-    FARMERS ||--o{ QUEUE_EVENTS : has
-    FARMERS ||--o{ PROCUREMENTS : owns
-    FARMERS ||--o{ PAYMENTS : receives
-    FARMERS ||--o{ CALLS : makes
-
-    MANDIS ||--o{ SLOTS : provides
-    MANDIS ||--o{ PRICE_CACHE : has
-
-    SLOTS ||--o{ BOOKINGS : contains
-
-    PROCUREMENTS ||--o{ PAYMENTS : results_in
-
-    PROCUREMENTS ||--o{ PROOF_EVENTS : creates
-    PAYMENTS ||--o{ PROOF_EVENTS : creates
-
-    FARMERS {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    MANDIS {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    SLOTS {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    BOOKINGS {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    QUEUE_EVENTS {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    PROCUREMENTS {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    PAYMENTS {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    PRICE_CACHE {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    CALLS {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    PROOF_EVENTS {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    AUDIT_LOGS {
-        uuid id
-        timestamp created_at
-        timestamp updated_at
-    }
-
-🗂️ Knowledge Base + pgvector
-
-The planned semantic knowledge layer uses a dedicated table:
-
-knowledge_base
-├── id
-├── content
-├── metadata
-├── embedding
-├── created_at
-└── updated_at
-
-The embedding field will use PostgreSQL's vector type through pgvector.
-
-This avoids operating a separate Qdrant/vector-database service.
-
-Why pgvector?
-
-Requirement
-
-pgvector
-
-Works inside PostgreSQL
-
-✅
-
-Works with Supabase
-
-✅
-
-Relational + vector data together
-
-✅
-
-SQL filtering
-
-✅
-
-Semantic similarity search
-
-✅
-
-Separate vector infrastructure required
-
-❌
-
-Suitable for this project's initial scale
-
-✅
-
-🧩 Tech Stack
-
-🏛️ Monorepo & Tooling
-
-Technology
-
-Purpose
-
-Turborepo
-
-Monorepo orchestration
-
-pnpm Workspaces
-
-Dependency/workspace management
-
-TypeScript
-
-Primary application language
-
-Node.js
-
-Backend/runtime ecosystem
-
-⚙️ Backend
-
-Technology
-
-Purpose
-
-Fastify
-
-High-performance HTTP API
-
-TypeScript
-
-Type-safe backend
-
-Supabase
-
-Database/Auth/Realtime platform
-
-PostgreSQL
-
-Primary relational database
-
-pgvector
-
-Vector embeddings + semantic search
-
-📞 Voice AI
-
-Technology
-
-Purpose
-
-Twilio
-
-Telephony / call infrastructure
-
-Deepgram
-
-Speech-to-text layer
-
-Groq
-
-LLM inference
-
-TypeScript
-
-Voice-agent package
-
-📱 Mobile
-
-Technology
-
-Purpose
-
-Expo
-
-React Native development platform
-
-React Native
-
-Farmer mobile application
-
-Expo Router
-
-File-based navigation
-
-TypeScript
-
-Type-safe mobile code
-
-🖥️ Web
-
-Technology
-
-Purpose
-
-Next.js
-
-Web applications
-
-App Router
-
-Next.js routing
-
-Tailwind CSS
-
-UI styling
-
-TypeScript
-
-Type-safe frontend
-
-⛓️ Blockchain
-
-Technology
-
-Purpose
-
-Solidity
-
-Smart contract development
-
-Hardhat
-
-EVM development/deployment
-
-Shardeum
-
-Target EVM testnet
-
-ProofRegistry.sol
-
-Procurement/payment proof registry
-
-🖼️ Technology Overview
-
-┌───────────────────────────────────────────────────────────────┐
-│                         KISANSETU                             │
-├───────────────────────────────────────────────────────────────┤
-│                                                               │
-│  📞 Voice AI        📱 Mobile         🖥️ Dashboard            │
-│  Twilio             Expo             Next.js                  │
-│  Deepgram           React Native     Tailwind                 │
-│  Groq               Expo Router                              │
-│                                                               │
-├───────────────────────────────────────────────────────────────┤
-│                         BACKEND                               │
-│                                                               │
-│                    Fastify + TypeScript                       │
-│                                                               │
-├───────────────────────────────────────────────────────────────┤
-│                       DATA LAYER                              │
-│                                                               │
-│       Supabase Auth     PostgreSQL     Realtime                │
-│                                      +                        │
-│                                    pgvector                   │
-│                                                               │
-├───────────────────────────────────────────────────────────────┤
-│                       PROOF LAYER                             │
-│                                                               │
-│            Solidity + Hardhat + Shardeum                      │
-│                                                               │
-└───────────────────────────────────────────────────────────────┘
-
-🧑‍🤝‍🧑 Team Ownership
-
-Area
-
-Owner(s)
-
-backend/
-
-Krishna, Vansh
-
-voice-ai/
-
-Krishna, Aarushi, Vansh
-
-mobile-app/
-
-Vansh
-
-staff-dashboard/
-
-Navya
-
-web-dashboard/
-
-Navya
-
-agrochain/
-
-Aarush
-
-design/
-
-Mehar
-
-docs/
-
-Shared — Krishna maintains
-
-pitch/
-
-Navya, Mehar
-
-📁 Project Structure
-
-kisancall-agrochain/
-│
-├── backend/                       # Fastify API + database layer
-│   ├── src/
-│   │   ├── auth/
-│   │   │   └── roles.ts
-│   │   ├── db/
-│   │   │   └── schema.sql
-│   │   └── routes/
-│   │       ├── farmers.ts
-│   │       ├── bookings.ts
-│   │       ├── queue.ts
-│   │       ├── status.ts
-│   │       ├── staff.ts
-│   │       ├── payments.ts
-│   │       └── mandis.ts
-│   ├── .env.example
-│   ├── package.json
-│   └── tsconfig.json
-│
-├── voice-ai/                      # Voice agent package
-│   ├── src/
-│   │   ├── prompts/
-│   │   │   └── system-prompt.md
-│   │   ├── intents/
-│   │   │   └── intents.ts
-│   │   ├── context/
-│   │   │   └── context-object.ts
-│   │   ├── tools/
-│   │   │   ├── get-slot.ts
-│   │   │   ├── get-queue.ts
-│   │   │   ├── get-price.ts
-│   │   │   └── get-payment.ts
-│   │   └── tests/
-│   │       └── scripted-calls/
-│   ├── package.json
-│   └── tsconfig.json
-│
-├── mobile-app/                    # Farmer mobile application
-│   ├── app/
-│   │   ├── register.tsx
-│   │   ├── slot.tsx
-│   │   ├── queue.tsx
-│   │   ├── price.tsx
-│   │   └── status.tsx
-│   └── .env.example
-│
-├── staff-dashboard/               # Staff operations dashboard
-│   ├── app/
-│   │   ├── today/
-│   │   ├── queue/
-│   │   ├── arrivals/
-│   │   ├── procurement/
-│   │   └── payments/
-│   └── .env.example
-│
-├── web-dashboard/                 # Minimal farmer web fallback
-│   └── app/
-│       ├── status/
-│       └── queue/
-│
-├── agrochain/                     # Blockchain proof layer
-│   ├── contracts/
-│   │   └── ProofRegistry.sol
-│   ├── scripts/
-│   │   └── deploy.ts
-│   ├── src/
-│   │   └── proof-builder/
-│   ├── .env.example
-│   ├── hardhat.config.ts
-│   └── package.json
-│
-├── design/                        # Figma exports + design tokens
-│   ├── tokens/
-│   └── README.md
-│
-├── docs/                          # Shared project documentation
-│   ├── API_CONTRACT.md
-│   ├── DB_SCHEMA.md
-│   └── PLAN.md
-│
-├── pitch/                         # Presentation material
-│   └── README.md
-│
-├── package.json                   # Root workspace configuration
-├── turbo.json                     # Turborepo configuration
-├── pnpm-workspace.yaml            # pnpm workspace definition
-├── .nvmrc                         # Node.js version
-├── .gitignore
-└── README.md
-
-🔌 API Surface
-
-The backend is organized around clear domain groups.
-
-Method
-
-Endpoint
-
-Purpose
-
-POST
-
-/farmers
-
-Farmer registration stub
-
-POST
-
-/bookings
-
-Booking creation stub
-
-GET
-
-/farmers/:id/queue
-
-Farmer queue status
-
-GET
-
-/farmers/:id/status
-
-Farmer procurement/payment status
-
-POST
-
-/staff/arrivals
-
-Staff arrival update
-
-POST
-
-/staff/procurement
-
-Procurement update
-
-PATCH
-
-/payments/:id
-
-Payment status update
-
-GET
-
-/mandis/:id/prices
-
-Mandi price retrieval
-
-GET
-
-/health
-
-Backend health check
-
-Voice endpoints
-
-Method
-
-Endpoint
-
-POST
-
-/voice/webhook
-
-POST
-
-/voice/tool/get-slot
-
-POST
-
-/voice/tool/get-queue
-
-POST
-
-/voice/tool/get-price
-
-POST
-
-/voice/tool/get-payment
-
-🗣️ Voice Agent Intents
-
-The current intent scaffold includes:
-
-get_slot
-get_queue
-get_price
-get_payment
-booking_create
-booking_update
-
-The future voice agent context includes:
-
-farmer_id
-language
-preferred_mandi
-crop
-today_slot
-queue_position
-queue_eta
-latest_price
-price_date
-procurement_status
-payment_status
-last_call_outcome
-
-📊 Operational Status Model
-
-The staff dashboard uses a consistent status vocabulary:
-
-BOOKED
-   ↓
-ARRIVED
-   ↓
-IN_QUEUE
-   ↓
-PROCURED
-   ↓
-PAYMENT_PROCESSING
-   ↓
-PAID
-
-stateDiagram-v2
-    [*] --> BOOKED
-    BOOKED --> ARRIVED
-    ARRIVED --> IN_QUEUE
-    IN_QUEUE --> PROCURED
-    PROCURED --> PAYMENT_PROCESSING
-    PAYMENT_PROCESSING --> PAID
-
-This provides a common language between the backend, mobile app, dashboard and future voice interactions.
-
-🔐 Roles
-
-The backend role model currently defines:
-
-Farmer
-Operator
-Supervisor
-Admin
-
-The purpose is to provide a common authorization vocabulary before detailed access-control rules are implemented.
-
-🛡️ Security Principles
-
-KisanSetu is designed around several basic security principles:
-
-Never commit .env files or secrets.
-
-Keep Supabase service-role credentials server-side.
-
-Do not expose privileged backend credentials to the mobile app.
-
-Use the public/anonymous Supabase key only where appropriate.
-
-Keep blockchain deployer private keys outside source control.
-
-Treat farmer and payment information as sensitive application data.
-
-Use role-based authorization before exposing staff operations.
-
-Keep proof-event data separate from the full transactional record.
-
-The current repository is a scaffold. Production-grade authentication, authorization, validation, rate limiting, audit policies, and secret management are implementation work for later phases.
-
-🧪 Development Philosophy
-
-This repository intentionally starts as a contract-first skeleton.
-
-That means the team agrees on:
-
-folder ownership
-
-API names
-
-database table names
-
-shared field names
-
-voice intents
-
-roles
-
-status vocabulary
-
-proof-event concepts
-
-before implementing the complete business logic.
-
-Why?
-
-Because multiple developers are working simultaneously.
-
-A shared contract prevents:
-
-Developer A:
-"I called it /farmer-status"
-
-Developer B:
-"I expected /farmers/:id/status"
-
-Developer C:
-"My database table is farmer_records"
-
-Developer D:
-"I used farmerId instead of farmer_id"
-
-Instead, everyone builds against the same agreed interface.
-
-🚧 Current Project Status
-
-🟡 Scaffold / Architecture Phase
-
-The repository currently focuses on:
-
-Monorepo setup
-
-Workspace structure
-
-API contracts
-
-Database schema skeleton
-
-Voice-agent interfaces
-
-Mobile route/page skeletons
-
-Dashboard skeletons
-
-AgroChain contract/service skeleton
-
-Documentation
-
-pgvector architecture
-
-Not yet implemented in the skeleton
-
-Real Supabase database connections
-
-Production authentication flows
-
-Real Twilio integration
-
-Real Deepgram integration
-
-Real Groq integration
-
-Actual embedding generation
-
-Actual pgvector similarity retrieval
-
-Complete RAG pipeline
-
-Production payment integration
-
-Production mandi API integration
-
-Live Shardeum deployment
-
-Complete business logic
-
-This distinction is intentional.
-
-🚀 Getting Started
-
-Prerequisites
-
-Install:
-
-Node.js
-
-pnpm
-
-Git
-
-Check versions:
-
-node --version
-pnpm --version
-git --version
-
-Clone
-
-git clone <YOUR_REPOSITORY_URL>
-cd kisancall-agrochain
-
-Install dependencies
-
+1. Farmer registers by voice call or through the app
+2. System identifies the farmer's preferred mandi and crop
+3. Farmer is offered an available procurement slot
+4. An AI call or SMS confirms the slot along with the current reference price
+5. Farmer travels to the centre; staff mark the farmer as **Arrived**
+6. The queue engine computes live position and estimated wait time
+7. Crop is weighed and verified; a procurement record is created
+8. The backend builds a proof record and anchors a hash of the key fields through AgroChain
+9. Procurement status becomes **Completed**
+10. Payment status moves to **Processing**, then **Paid**
+11. An AI call proactively informs the farmer of the latest status
+12. Farmer can request the transaction/proof reference at any time, by voice or in-app
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+
+### Backend
+
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Fastify](https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white)
+![Turborepo](https://img.shields.io/badge/Turborepo-EF4444?style=for-the-badge&logo=turborepo&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white)
+
+### Data Layer
+
+![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![pgvector](https://img.shields.io/badge/pgvector-4169E1?style=for-the-badge)
+
+### AI Voice Layer
+
+![Groq](https://img.shields.io/badge/Groq-F55036?style=for-the-badge)
+![Deepgram](https://img.shields.io/badge/Deepgram-13EF93?style=for-the-badge)
+![Twilio](https://img.shields.io/badge/Twilio-F22F46?style=for-the-badge&logo=twilio&logoColor=white)
+
+### Blockchain — AgroChain
+
+![Solidity](https://img.shields.io/badge/Solidity-363636?style=for-the-badge&logo=solidity&logoColor=white)
+![Hardhat](https://img.shields.io/badge/Hardhat-FFF100?style=for-the-badge&logo=hardhat&logoColor=black)
+![Ethers.js](https://img.shields.io/badge/Ethers.js-2535A0?style=for-the-badge&logo=ethers&logoColor=white)
+![Shardeum](https://img.shields.io/badge/Shardeum-00A3FF?style=for-the-badge)
+
+### Infrastructure
+
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+![Sentry](https://img.shields.io/badge/Sentry-362D59?style=for-the-badge&logo=sentry&logoColor=white)
+
+### Real Government Data
+
+![data.gov.in](https://img.shields.io/badge/data.gov.in-138808?style=for-the-badge)
+![Agmarknet](https://img.shields.io/badge/AGMARKNET-FF9933?style=for-the-badge)
+
+### Complete Stack Table
+
+| Layer | Technology | Purpose |
+|---|---|---|
+| Farmer mobile app | React Native (Expo) | Single cross-platform codebase for Android/iOS, fast iteration |
+| Farmer web dashboard | Next.js + TypeScript + Tailwind CSS | Lightweight fallback for smartphone/web users |
+| Staff dashboard | Next.js + TypeScript + Tailwind CSS | Realtime queue and procurement console, role-based UI |
+| Backend API | Node.js + Fastify | Core business logic, auth, tool endpoints for the voice agent |
+| Database | PostgreSQL (Supabase) | System of record for farmers, slots, queue, procurement, payments |
+| Realtime layer | Supabase Realtime / WebSockets | Live queue and status updates pushed to dashboards and app |
+| Authentication | Supabase Auth (phone OTP + role-based access) | Farmer and staff identity and permissions |
+| Telephony | India-compliant cloud telephony provider (dev: Twilio-class test config; production: Indian carrier) | Inbound/outbound calling and toll-free routing |
+| Speech-to-Text | Deepgram Nova (multilingual, streaming) | Real-time transcription of farmer speech |
+| Conversational LLM | Groq-hosted open model (low-latency tool-calling) | Intent understanding and structured tool selection |
+| Text-to-Speech | Deepgram Aura / Flux (streaming) | Natural, low-latency spoken responses with barge-in support |
+| SMS gateway | DLT-registered Indian SMS provider | Status notifications and fallback alerts |
+| Blockchain network | Shardeum (EVM-compatible) | Low-fee, scalable anchoring for AgroChain proof events |
+| Smart contracts | Solidity + Hardhat | AgroChain event-anchoring contract and deployment tooling |
+| Blockchain client | ethers.js | Backend interaction with the AgroChain smart contract |
+| Market data source | data.gov.in / AGMARKNET daily mandi price API | Government-reported wholesale price data |
+| Hosting — web | Vercel | Deployment for dashboards and marketing site |
+| Hosting — backend | Render | Backend API and worker deployment |
+| Monitoring | Sentry + platform logs | Error tracking and production observability |
+| CI/CD | GitHub Actions | Automated build, test, and deploy pipeline |
+
+---
+
+## 🏗️ System Architecture
+
+### Architectural Principle
+
+The system is **one backend brain reachable through several channels.** The mobile app, farmer web dashboard, staff dashboard, and phone call all query the same backend for the same facts. The operational database holds all live data. AgroChain only receives a narrow, pre-approved set of events to anchor.
+
+```
+                       ┌─────────────────────────────┐
+                       │   Farmer Phone               │
+                       │   AI Voice · SMS fallback     │
+                       └───────────────┬───────────────┘
+                                       │
+    ┌──────────────────┐              │              ┌──────────────────┐
+    │  Mobile App        │             │              │  Staff Dashboard   │
+    │  (Expo)             │◄───────────┼─────────────►│  Queue · Payments   │
+    └──────────┬─────────┘             │              └─────────┬─────────┘
+               │                       ▼                        │
+               │        ┌───────────────────────────────┐        │
+               └───────►│      KisanCall Backend           │◄───────┘
+                        │      Node.js / Fastify API        │
+                        │      Auth · Business Rules ·      │
+                        │      Voice Tool Layer              │
+                        └───┬───────────────┬───────────┬───┘
+                            │               │           │
+                 ┌──────────▼───┐  ┌────────▼──────┐ ┌───▼─────────────┐
+                 │ Supabase       │  │ Voice AI       │ │ Event & Proof    │
+                 │ (Postgres)     │  │ Pipeline       │ │ Builder →         │
+                 │ farmers, slots,│  │ STT → LLM →    │ │ AgroChain          │
+                 │ queue, payments│  │ TTS            │ │ (Shardeum)          │
+                 └────────────────┘  └───────────────┘ └────────────────────┘
+                            ▲
+                            │
+                 ┌──────────┴───────────┐
+                 │  data.gov.in /         │
+                 │  Agmarknet (live prices)│
+                 └───────────────────────┘
+```
+
+### Data Flow for a Transaction Event
+
+1. An operator marks a procurement stage complete on the staff dashboard
+2. The backend writes the full record to PostgreSQL
+3. The Event & Proof Builder canonicalises the relevant fields (event type, quantity, price, timestamp, transaction ID) and computes a hash
+4. The hash and metadata are submitted to the AgroChain smart contract; the resulting transaction hash is stored back against the record
+5. The farmer is notified by an outbound AI call or SMS, and can request the proof reference at any time
+
+---
+
+## 🗄️ Data Model
+
+### Core Tables
+
+| Table | Key fields |
+|---|---|
+| `farmers` | id, name, phone, language, preferred_mandi_id, crop |
+| `mandis` | id, name, district, daily_capacity, working_hours |
+| `slots` | id, mandi_id, date, start_time, end_time, capacity |
+| `bookings` | id, farmer_id, slot_id, status, token |
+| `queue_events` | booking_id, event_type, timestamp, sequence |
+| `procurements` | booking_id, quantity, price, quality_status, status |
+| `payments` | procurement_id, status, reference, updated_at |
+| `price_cache` | mandi, commodity, min_price, max_price, modal_price, date, fetched_at |
+| `calls` | farmer_id, direction, intent, outcome, duration, timestamp |
+| `proof_events` | procurement_id, event_type, payload_hash, chain_tx_hash |
+| `audit_logs` | actor, action, entity, old_value, new_value, timestamp |
+
+### What Goes On-Chain vs Off-Chain
+
+The guiding rule: **nothing personally identifying or financially sensitive is ever written to the public ledger.** Only a hash and minimal event metadata are anchored.
+
+| Data | PostgreSQL (Supabase) | AgroChain (on-chain) |
+|---|:---:|:---:|
+| Farmer name / phone / profile | ✅ | ❌ |
+| Slot / queue data | ✅ | ❌ |
+| Full payment details | ✅ | ❌ |
+| Bank details | ✅ (encrypted) | ❌ |
+| Transaction / event ID | ✅ | ✅ |
+| Hash of selected transaction payload | ✅ | ✅ |
+| Agreed quantity / price hash | ✅ | ✅ |
+| Procurement completion event | ✅ | ✅ |
+| Payment confirmation event hash | ✅ | ✅ |
+| Timestamp / block reference | ✅ | ✅ |
+
+---
+
+## 🔌 Core API Endpoints
+
+| Endpoint | Purpose |
+|---|---|
+| `POST /farmers` | Register a new farmer |
+| `POST /bookings` | Create or confirm a procurement slot booking |
+| `GET /farmers/:id/queue` | Live queue position and ETA |
+| `GET /farmers/:id/status` | Combined status across booking, procurement, and payment |
+| `GET /mandis/:id/prices` | Latest government-reported price for a mandi/commodity |
+| `POST /staff/arrivals` | Mark a farmer as arrived |
+| `POST /staff/procurement` | Record procurement and quality verification |
+| `PATCH /payments/:id` | Update payment status |
+| `POST /voice/webhook` | Telephony inbound event handler |
+| `POST /voice/tool/get-slot` | Voice-agent tool: fetch slot details |
+| `POST /voice/tool/get-queue` | Voice-agent tool: fetch live queue position |
+| `POST /voice/tool/get-price` | Voice-agent tool: fetch dated mandi price |
+| `POST /voice/tool/get-payment` | Voice-agent tool: fetch payment status |
+| `POST /proof-events` | Create and anchor a new AgroChain proof event |
+| `GET /proof/:id` | Retrieve a proof reference and its chain transaction hash |
+
+---
+
+## 🎙️ Voice AI Engineering
+
+### Pipeline
+
+```
+Farmer speech
+   → Telephony audio stream
+   → Streaming Speech-to-Text (Deepgram)
+   → Intent & tool selection
+   → Backend tool call (get_slot / get_queue / get_price / get_payment / booking_create)
+   → LLM composes a short answer strictly from tool output (Groq)
+   → Streaming Text-to-Speech (Deepgram)
+   → Farmer hears the response
+```
+
+### Context Design
+
+Rather than loading a farmer's entire history and every FAQ document into the model, each call is given a **compact, structured context object** containing only what's relevant right now: `farmer_id`, `language`, `preferred_mandi`, `crop`, today's slot, queue position and ETA, latest price and its date, procurement status, payment status, and the outcome of the last call. This keeps responses fast, predictable, and grounded.
+
+### Latency Targets
+
+| Stage | Target | Approach |
+|---|---|---|
+| Speech capture | Continuous streaming | Detect end-of-speech quickly |
+| Speech-to-Text | 100–400 ms incremental | Streaming STT with turn detection |
+| Backend tool call | 50–250 ms | Indexed queries against the operational database |
+| LLM time-to-first-token | 100–400 ms | Small, fast tool-calling model with concise prompts |
+| Text-to-Speech first audio | 100–400 ms | Streaming TTS |
+| **Perceived total response** | **0.5–1.5 s** | Stream partial audio; keep answers short |
+
+### Barge-In
+
+If the farmer starts speaking while the agent's audio is still playing, the agent **stops output immediately**, preserves conversation state, and returns to listening. This is treated as a first-class requirement — natural conversation depends on it.
+
+### Grounding & Hallucination Control
+
+- The LLM never invents a price, queue position, or payment status
+- Every factual answer is retrieved through an internal tool call first
+- If data is missing or stale, the agent says so and offers staff escalation instead of guessing
+- Every price response includes its reporting date
+- Every payment response is read from the authoritative `payments` table, never generated freely
+
+---
+
+## ⛓️ AgroChain — The Proof Layer
+
+### Purpose
+
+AgroChain exists to answer one question with confidence: **can the farmer trust that what the system says happened is what actually happened?** Blockchain anchoring is used narrowly, only for events where a durable, independently checkable record adds real value — it never substitutes for the operational database.
+
+### Event Lifecycle
+
+```
+PROCUREMENT_CREATED → QUANTITY_VERIFIED → PRICE_CONFIRMED
+   → PROCUREMENT_COMPLETED → PAYMENT_INITIATED → PAYMENT_CONFIRMED
+```
+
+### What Is Recorded per Event
+
+- A unique transaction/event identifier
+- A hash of the canonicalised transaction fields
+- Event type and timestamp
+- A pseudonymous actor/system identifier
+- A reference to the previous event where relevant
+- The resulting blockchain transaction hash
+
+### Honest Limitations
+
+A blockchain record cannot, by itself, prove that a physical weighing or a bank payment was conducted honestly — it can only make the recorded event significantly harder to alter after the fact. AgroChain is designed to **complement, not replace**, trusted staff processes, authentication, and weighing/quality evidence.
+
+### Resilience
+
+Proof writes are queued and submitted **asynchronously**, so a temporary blockchain network issue never blocks a farmer's procurement or payment flow. Failed writes are retried with idempotency keys to prevent duplicate anchoring.
+
+---
+
+## 🔐 Security & Privacy
+
+| Risk | Control |
+|---|---|
+| Phone number leakage | Role-based access, server-side masking, no public exposure |
+| Identity document leakage | Minimise storage; rely on authorised identity systems where possible |
+| Bank detail leakage | Encrypted at rest, never written to the blockchain |
+| AI hallucination | Tool-first architecture; no free-form factual generation |
+| False staff update | Role-based permissions and full audit logging |
+| Queue manipulation | Server-side queue rules with an immutable audit trail |
+| Blockchain key compromise | Secure secret storage; separate deployment and admin keys |
+| Duplicate proof events | Idempotency keys on every proof submission |
+| Third-party API outage | Caching with clear stale-data warnings |
+| Wrong farmer record | Verified mobile number plus staff-assisted correction |
+| Prompt injection via external data | External text/data treated as untrusted; strict tool allowlist |
+
+---
+
+## 📁 Repository Structure
+
+This is a **Turborepo + pnpm workspace** monorepo:
+
+```
+kisansaarthi-agrochain/
+├── backend/            → Fastify + TypeScript API (farmers, bookings, queue, payments, mandis)
+├── voice-ai/           → Voice AI package — intents, context object, tool stubs, system prompt
+├── mobile-app/         → Expo (React Native) farmer app
+├── staff-dashboard/    → Next.js staff portal (today, queue, arrivals, procurement, payments)
+├── web-dashboard/      → Next.js read-only farmer web fallback
+├── agrochain/          → Hardhat + Solidity proof-registry contract (Shardeum testnet)
+├── design/             → Shared design tokens & Figma export
+├── docs/                → API_CONTRACT.md, DB_SCHEMA.md, PLAN.md
+└── pitch/               → Presentation deck, script, Q&A prep
+```
+
+| Package | Owner(s) |
+|---|---|
+| `backend/` | Krishna, Vansh |
+| `voice-ai/` | Krishna, Aarushi, Vansh |
+| `mobile-app/` | Vansh |
+| `staff-dashboard/` | Navya |
+| `web-dashboard/` | Navya |
+| `agrochain/` | Aarush |
+| `design/` | Mehar |
+| `docs/` | Shared (Krishna maintains) |
+| `pitch/` | Navya, Mehar |
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/<your-org>/kisansaarthi-agrochain.git
+cd kisansaarthi-agrochain
+
+# Install dependencies (monorepo-wide)
 pnpm install
 
-Start development
+# Copy environment variables in each package
+cp backend/.env.example backend/.env
+cp mobile-app/.env.example mobile-app/.env
+cp staff-dashboard/.env.example staff-dashboard/.env
 
+# Run everything in dev mode (via Turborepo)
 pnpm dev
+```
 
-Turborepo will orchestrate the workspace development processes.
+> Fill in your own Supabase, Groq, Deepgram, and Twilio/telephony keys in each `.env` file before running the voice pipeline or database-backed features.
 
-🔑 Environment Variables
+---
 
-Each package contains its own .env.example.
+## 🗺️ Roadmap
 
-Backend
+| Phase | Build target | Exit criteria |
+|---|---|---|
+| **Phase 1** | Database schema, auth, staff dashboard shell, farmer app shell, price data adapter | Farmer, slot, and queue data flow end-to-end |
+| **Phase 2** | Voice pipeline, tool calling, Hindi/English intents for queue/price/payment | A live phone call correctly handles 5–10 scripted conversations |
+| **Phase 3** | Procurement lifecycle, AgroChain proof anchoring, SMS, error handling | A full procurement transaction produces a verifiable proof hash |
+| **Phase 4** | Polish, load testing, failure testing, demo rehearsal, metrics dashboard | The end-to-end demo runs reliably on the rehearsed path |
 
-SUPABASE_URL=
-SUPABASE_SERVICE_ROLE_KEY=
-DATA_GOV_IN_API_KEY=
-TWILIO_ACCOUNT_SID=
-TWILIO_AUTH_TOKEN=
-DEEPGRAM_API_KEY=
-GROQ_API_KEY=
+**Deferred to a later phase:** full nationwide government payment API integration · complete regional-language coverage · nationwide 1800 toll-free service · multi-centre route optimisation · buyer/trader marketplace features · automated dispute resolution · predictive demand and arrival modelling.
 
-Mobile App
+---
 
-EXPO_PUBLIC_API_URL=
-EXPO_PUBLIC_SUPABASE_ANON_KEY=
+## 📊 Impact Metrics
 
-Staff Dashboard
+| Metric | How KisanCall moves it | How to measure |
+|---|---|---|
+| Average waiting time | Pre-scheduled arrivals and live queue visibility | Compare centres before/after enablement |
+| Unnecessary trips | Remote status checks by phone/app | Trips/visits avoided, self-reported |
+| Missed slots | Reminder calls and SMS | Missed-slot percentage |
+| Status enquiries to staff | Voice self-service | Questions per 100 farmers routed to staff |
+| Payment uncertainty | Proactive payment updates | Time-to-notification after status change |
+| Digital inclusion | Voice-first access, no smartphone required | Share of farmers completing the core task by voice alone |
+| Dispute evidence | AgroChain transaction proof | Number of events with a verifiable proof reference |
+| Farmer satisfaction | End-to-end coordination | Post-call CSAT and task completion rate |
 
-NEXT_PUBLIC_API_URL=
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+---
 
-AgroChain
+## 👨‍👩‍👧‍👦 Team
 
-SHARDEUM_RPC_URL=
-DEPLOYER_PRIVATE_KEY=
+<div align="center">
 
-Never commit actual secrets. Use .env.example files as templates only.
+### ❤️ Team TeenTitans
 
-🧰 Useful Commands
+**JSS University — Smart India Hackathon 2026**
 
-# Install all workspace dependencies
-pnpm install
+</div>
 
-# Start development
-pnpm dev
+| Name | Role | Branch & Year |
+|---|---|---|
+| **Krishna** *(Team Lead)* | Full Stack Developer + AI Voice Developer | AIML, 2nd Year |
+| **Vansh Bhatia** | Full Stack Developer + Android Developer | CSE Core, 2nd Year |
+| **Aarushi Sachdeva** | AIML Developer + Researcher | AIML, 2nd Year |
+| **Navya Vishwakarma** | Researcher + Presenter | AIML, 2nd Year |
+| **Aarush Goel** | Full Stack Developer | AIML, 2nd Year |
+| **Mehar Sehgal** | UI/UX Developer | ECE, 2nd Year |
 
-# Build workspaces
-pnpm build
+---
 
-# Run type checks
-pnpm typecheck
+## 🙏 Conclusion
 
-# Run linting where configured
-pnpm lint
+KisanCall is best understood as a carefully bounded digital public-service product, not a bundle of unrelated technologies. Government and market data give the system facts. The voice layer gives the farmer access without requiring literacy, a smartphone, or a data connection. The procurement engine coordinates the actual workflow at the centre. AgroChain anchors proof of what happened, so trust doesn't depend solely on taking the system's word for it.
 
-Available scripts may evolve as each workspace moves from scaffolding to implementation.
+> *KisanCall tells the farmer what is happening. AgroChain proves what happened.*
 
-🧭 Development Roadmap
+### Support
 
-timeline
-    title KisanSetu Development Roadmap
+💙 If you like this project, give it a ⭐ and share it with your team!
 
-    Phase 1 : Repository Skeleton
-             : Workspace setup
-             : API contracts
-             : DB schema
-             : Architecture
+<div align="center">
 
-    Phase 2 : Core Data Layer
-             : Supabase
-             : Authentication
-             : Database
-             : Realtime
+**🙏 THANK YOU 🙏**
 
-    Phase 3 : Voice AI
-             : Telephony
-             : Speech-to-text
-             : Intent handling
-             : Tool calling
+*Built with ❤️ by Team TeenTitans for Smart India Hackathon 2026*
 
-    Phase 4 : Farmer Experience
-             : Mobile app
-             : Slot
-             : Queue
-             : Price
-             : Status
-
-    Phase 5 : Staff Operations
-             : Dashboard
-             : Arrivals
-             : Procurement
-             : Payments
-
-    Phase 6 : Knowledge Layer
-             : Knowledge ingestion
-             : Embeddings
-             : pgvector
-             : Retrieval
-
-    Phase 7 : AgroChain
-             : Canonical events
-             : Hashing
-             : ProofRegistry
-             : Shardeum anchoring
-
-    Phase 8 : Integration
-             : End-to-end testing
-             : Demo flows
-             : Performance
-             : Security
-
-🧑‍💻 Contribution Workflow
-
-Every contributor should:
-
-Understand the module they own.
-
-Read the relevant documentation.
-
-Avoid changing shared contracts without discussing them.
-
-Keep changes scoped to their module.
-
-Test their work locally.
-
-Update documentation when a shared contract changes.
-
-Open a pull request with a clear description.
-
-Shared contracts
-
-Before changing any of these:
-
-API endpoint names
-
-request/response shapes
-
-database table names
-
-shared field names
-
-status vocabulary
-
-voice intents
-
-proof event names
-
-discuss the change with the team.
-
-📚 Documentation
-
-Document
-
-Purpose
-
-docs/API_CONTRACT.md
-
-Shared backend and voice API contracts
-
-docs/DB_SCHEMA.md
-
-Shared database schema
-
-docs/PLAN.md
-
-Work distribution and execution plan
-
-design/README.md
-
-Design assets and tokens
-
-pitch/README.md
-
-Pitch/deck documentation
-
-🎨 Design
-
-The design/ package is intentionally not a code package.
-
-It contains:
-
-design/
-├── README.md
-└── tokens/
-
-The folder is intended for:
-
-Figma exports
-
-Design tokens
-
-UI references
-
-Visual system documentation
-
-Future design assets
-
-🧠 Why This Architecture?
-
-One backend
-
-Instead of creating independent backends for every client:
-
-Mobile ─────┐
-Voice ──────┼──→ Fastify Backend ──→ Supabase
-Dashboard ──┤
-Web ────────┘
-
-This keeps business rules centralized.
-
-One source of transactional truth
-
-PostgreSQL stores the application's operational state.
-
-Farmer
-Slot
-Booking
-Queue
-Procurement
-Payment
-
-All clients consume the same underlying state.
-
-pgvector instead of a separate vector database
-
-The project uses PostgreSQL + pgvector as the planned semantic knowledge layer.
-
-This reduces infrastructure complexity and keeps relational filtering and semantic retrieval close to the same data platform.
-
-Blockchain only where it adds value
-
-Not every database operation belongs on-chain.
-
-Instead:
-
-Normal application data → PostgreSQL
-
-Important verifiable events → Hash → Shardeum
-
-This keeps the system practical while still providing a proof layer.
-
-🌱 Example Future Interaction
-
-Farmer asks:
-
-"Mera procurement slot kab hai?"
-
-System:
-
-Voice
-  ↓
-Speech-to-Text
-  ↓
-Intent: get_slot
-  ↓
-Backend
-  ↓
-Farmer + Booking + Slot
-  ↓
-Response
-  ↓
-Text-to-Speech
-  ↓
-Farmer hears answer
-
-Farmer asks:
-
-"Mera payment aa gaya?"
-
-Voice
-  ↓
-Intent: get_payment
-  ↓
-Backend
-  ↓
-Payment record
-  ↓
-Status
-  ↓
-Voice response
-
-Procurement completes:
-
-Procurement Completed
-        ↓
-Canonical Event
-        ↓
-SHA/Keccak-style event hash
-        ↓
-ProofRegistry
-        ↓
-Shardeum
-        ↓
-Proof Reference
-
-🏆 Why KisanSetu?
-
-KisanSetu is not intended to be just another farmer-facing chatbot.
-
-The architecture combines:
-
-Accessibility
-
-→ Voice-first interaction
-
-Operational visibility
-
-→ Slot + queue + procurement + payment tracking
-
-Unified data
-
-→ Supabase PostgreSQL
-
-AI knowledge retrieval
-
-→ pgvector
-
-Staff operations
-
-→ Dedicated dashboard
-
-Verifiability
-
-→ AgroChain proof anchoring
-
-The goal is a system that is simple for the farmer, useful for staff, and technically verifiable underneath.
-
-📈 Future Possibilities
-
-The architecture can later support:
-
-More Indian languages
-
-Additional crops
-
-More procurement centers
-
-Automated farmer notifications
-
-Advanced price intelligence
-
-Better queue prediction
-
-Voice-based booking
-
-Payment alerts
-
-Offline-first mobile workflows
-
-Richer RAG knowledge
-
-Analytics and operational forecasting
-
-Additional blockchain proof events
-
-Multi-state deployment
-
-These are future directions, not promises of the current scaffold.
-
-👥 Team
-
-Member
-
-Responsibility
-
-Krishna
-
-Backend, voice orchestration, architecture, documentation
-
-Vansh
-
-Database, mobile app, queue, telephony
-
-Aarushi
-
-Conversational AI, intents, prompts, knowledge layer
-
-Navya
-
-Staff dashboard, web dashboard, pitch/research
-
-Aarush
-
-AgroChain, Solidity, proof layer
-
-Mehar
-
-UI/UX, design system, visual assets
-
-📌 Project Principles
-
-Farmer-first.
-
-Voice-first, not smartphone-only.
-
-One source of transactional truth.
-
-AI assists; it does not invent operational facts.
-
-Blockchain proves important events; it does not replace the database.
-
-Shared contracts before parallel implementation.
-
-⭐ Support the Project
-
-If you find KisanSetu interesting:
-
-⭐ Star the repository
-
-🐛 Open an issue
-
-💡 Suggest improvements
-
-🔀 Submit a pull request
-
-📢 Share the project
-
-📄 License
-
-License information will be added when the project license is finalized.
-
-<p align="center">
-  <strong>🌾 KisanSetu</strong>
-  <br>
-  <em>Connecting farmers to procurement with voice, data, and verifiable trust.</em>
-</p>
+</div>
