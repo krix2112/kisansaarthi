@@ -41,24 +41,20 @@ Built for **Smart India Hackathon 2026** · Problem Statement **26032** · Depar
 
 1. [About the Project](#about-the-project)
 2. [The Problem](#the-problem)
-3. [What We're Not Claiming](#what-were-not-claiming)
-4. [Our Solution & USP](#our-solution--usp)
-5. [Feature Set](#feature-set)
-6. [User Personas](#user-personas)
-7. [End-to-End Farmer Journey](#end-to-end-farmer-journey)
-8. [Workflow Visualizations](#workflow-visualizations)
-9. [Tech Stack](#tech-stack)
-10. [System Architecture](#system-architecture)
-11. [Data Model](#data-model)
-12. [Core API Endpoints](#core-api-endpoints)
-13. [Voice AI Engineering](#voice-ai-engineering)
-14. [AgroChain — The Proof Layer](#agrochain--the-proof-layer)
-15. [Security & Privacy](#security--privacy)
-16. [Repository Structure](#repository-structure)
-17. [Getting Started](#getting-started)
-18. [Roadmap](#roadmap)
-19. [Impact Metrics](#impact-metrics)
-20. [Team](#team)
+3. [Our Solution & USP](#our-solution--usp)
+4. [Feature Set](#feature-set)
+5. [User Personas](#user-personas)
+6. [Workflow Visualizations](#workflow-visualizations)
+7. [Tech Stack](#tech-stack)
+8. [System Architecture](#system-architecture)
+9. [Voice AI Engineering](#voice-ai-engineering)
+10. [AgroChain — The Proof Layer](#agrochain--the-proof-layer)
+11. [Security & Privacy](#security--privacy)
+12. [Repository Structure](#repository-structure)
+13. [Getting Started](#getting-started)
+14. [Roadmap](#roadmap)
+15. [Impact Metrics](#impact-metrics)
+16. [Team](#team)
 
 ---
 
@@ -113,14 +109,6 @@ Every one of these steps generates information that's useful to the farmer — b
 | Low smartphone comfort | No new app or workflow to learn | Phone call is the primary channel; app is optional |
 | Poor rural connectivity | A channel that still works with 2G or no data | Voice and SMS require no data connection |
 | Trust in digital records | Evidence that a transaction was actually recorded as agreed | A transaction reference the farmer can quote back, anchored via AgroChain |
-
----
-
-## What We're Not Claiming
-
-This project deliberately avoids overstating the problem. Digital procurement infrastructure already exists in India (e-NAM, state portals like Punjab's Anaaj Kharid, MP's e-Uparjan, Haryana's Meri Fasal Mera Byora), mandi trading platforms already support electronic payments and lot tracking, and government-backed multilingual voice assistants for farmers are already emerging.
-
-**KisanCall is not positioned as the first digital tool for farmers** — it is positioned as a focused **coordination and trust layer** for the procurement journey specifically, built to be voice-first and independently verifiable.
 
 ---
 
@@ -207,23 +195,6 @@ KisanCall is built around three ideas held together tightly:
 | **Sunita** — Smartphone Farmer, 32 | Comfortable with WhatsApp and basic apps, occasional field connectivity issues | Uses the app to check status quickly, but appreciates that a call still comes through when something changes |
 | **Operator** — Centre Staff | Manages arrivals, queue, and procurement entry for 100–300 farmers a day | A fast, low-friction dashboard and a way to correct mistakes without losing the audit trail |
 | **Supervisor / Admin** | Oversees multiple operators | Visibility into missed calls, queue bottlenecks, and payment delays across the day; configures slot capacity |
-
----
-
-## End-to-End Farmer Journey
-
-1. Farmer registers by voice call or through the app
-2. System identifies the farmer's preferred mandi and crop
-3. Farmer is offered an available procurement slot
-4. An AI call or SMS confirms the slot along with the current reference price
-5. Farmer travels to the centre; staff mark the farmer as **Arrived**
-6. The queue engine computes live position and estimated wait time
-7. Crop is weighed and verified; a procurement record is created
-8. The backend builds a proof record and anchors a hash of the key fields through AgroChain
-9. Procurement status becomes **Completed**
-10. Payment status moves to **Processing**, then **Paid**
-11. An AI call proactively informs the farmer of the latest status
-12. Farmer can request the transaction/proof reference at any time, by voice or in-app
 
 ---
 
@@ -427,62 +398,7 @@ The system is **one backend brain reachable through several channels.** The mobi
 
 ---
 
-## Data Model
-
-### Core Tables
-
-| Table | Key fields |
-|---|---|
-| `farmers` | id, name, phone, language, preferred_mandi_id, crop |
-| `mandis` | id, name, district, daily_capacity, working_hours |
-| `slots` | id, mandi_id, date, start_time, end_time, capacity |
-| `bookings` | id, farmer_id, slot_id, status, token |
-| `queue_events` | booking_id, event_type, timestamp, sequence |
-| `procurements` | booking_id, quantity, price, quality_status, status |
-| `payments` | procurement_id, status, reference, updated_at |
-| `price_cache` | mandi, commodity, min_price, max_price, modal_price, date, fetched_at |
-| `calls` | farmer_id, direction, intent, outcome, duration, timestamp |
-| `proof_events` | procurement_id, event_type, payload_hash, chain_tx_hash |
-| `audit_logs` | actor, action, entity, old_value, new_value, timestamp |
-
-### What Goes On-Chain vs Off-Chain
-
-The guiding rule: **nothing personally identifying or financially sensitive is ever written to the public ledger.** Only a hash and minimal event metadata are anchored.
-
-| Data | PostgreSQL (Supabase) | AgroChain (on-chain) |
-|---|:---:|:---:|
-| Farmer name / phone / profile | | |
-| Slot / queue data | | |
-| Full payment details | | |
-| Bank details | (encrypted) | |
-| Transaction / event ID | | |
-| Hash of selected transaction payload | | |
-| Agreed quantity / price hash | | |
-| Procurement completion event | | |
-| Payment confirmation event hash | | |
-| Timestamp / block reference | | |
-
----
-
-## Core API Endpoints
-
-| Endpoint | Purpose |
-|---|---|
-| `POST /farmers` | Register a new farmer |
-| `POST /bookings` | Create or confirm a procurement slot booking |
-| `GET /farmers/:id/queue` | Live queue position and ETA |
-| `GET /farmers/:id/status` | Combined status across booking, procurement, and payment |
-| `GET /mandis/:id/prices` | Latest government-reported price for a mandi/commodity |
-| `POST /staff/arrivals` | Mark a farmer as arrived |
-| `POST /staff/procurement` | Record procurement and quality verification |
-| `PATCH /payments/:id` | Update payment status |
-| `POST /voice/webhook` | Telephony inbound event handler |
-| `POST /voice/tool/get-slot` | Voice-agent tool: fetch slot details |
-| `POST /voice/tool/get-queue` | Voice-agent tool: fetch live queue position |
-| `POST /voice/tool/get-price` | Voice-agent tool: fetch dated mandi price |
-| `POST /voice/tool/get-payment` | Voice-agent tool: fetch payment status |
-| `POST /proof-events` | Create and anchor a new AgroChain proof event |
-| `GET /proof/:id` | Retrieve a proof reference and its chain transaction hash |
+> **Note:** For detailed technical specifications, refer to [docs/DB_SCHEMA.md](./docs/DB_SCHEMA.md) for the data model and [docs/API_CONTRACT.md](./docs/API_CONTRACT.md) for core API endpoints.
 
 ---
 
@@ -686,8 +602,6 @@ pnpm dev
 ## Conclusion
 
 KisanCall is best understood as a carefully bounded digital public-service product, not a bundle of unrelated technologies. Government and market data give the system facts. The voice layer gives the farmer access without requiring literacy, a smartphone, or a data connection. The procurement engine coordinates the actual workflow at the centre. AgroChain anchors proof of what happened, so trust doesn't depend solely on taking the system's word for it.
-
-> *KisanCall tells the farmer what is happening. AgroChain proves what happened.*
 
 ### Support
 
