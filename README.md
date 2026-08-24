@@ -4,7 +4,7 @@
 
 ### Voice-First Procurement Coordination with a Verifiable Proof Layer
 
-*"Know the price. Know your slot. Know your queue. Know your payment. Have proof of what happened."*
+[![Typing SVG](https://readme-typing-svg.demolab.com/?font=Fira+Code&size=20&pause=1200&color=58A6FF&center=true&vCenter=true&width=650&lines=Know+the+price.+Know+your+slot.;Know+your+queue.+Know+your+payment.;Have+proof+of+what+happened.)](https://git.io/typing-svg)
 
 Built for **Smart India Hackathon 2026** · Problem Statement **26032** · Department of Consumer Affairs
 
@@ -148,13 +148,13 @@ KisanCall is built around three ideas held together tightly:
 ## Feature Set
 
 <details>
-<summary><b>‍ Farmer-Facing Features</b></summary>
+<summary><b> Farmer-Facing Features</b></summary>
 
 - Voice and app-based registration, with staff-assisted correction for low-connectivity users
 - Slot booking and confirmation with automatic reminder calls/SMS ahead of the arrival window
 - Live queue position and estimated wait time, available on demand by call or in-app
 - Daily government-reported mandi reference price, always read with date and source
-- Procurement status tracking through plain-language stages: **Booked Arrived In Queue Procured Payment Processing Paid**
+- Procurement status tracking through plain-language stages: **Booked → Arrived → In Queue → Procured → Payment Processing → Paid**
 - Payment status explained conversationally, not just displayed as a code
 - On-demand transaction/proof reference the farmer can request at any time
 - Multilingual voice support, starting with Hindi and English
@@ -163,7 +163,7 @@ KisanCall is built around three ideas held together tightly:
 </details>
 
 <details>
-<summary><b>‍ Staff / Procurement-Centre Features</b></summary>
+<summary><b> Staff / Procurement-Centre Features</b></summary>
 
 - Daily farmer list with pending registrations and slot capacity view
 - Arrival marking and live queue management
@@ -408,40 +408,46 @@ Both channels write to the exact same backend endpoint, so there is no divergent
 
 ## System Architecture
 
+<div align="center">
+<img src="./assets/architecture-animated.svg" alt="KisanCall animated system architecture — farmer phone and mobile app and staff dashboard feeding into the backend, which fans out to Supabase, the voice AI pipeline, and the AgroChain proof builder" width="850">
+
+<sub>Animated SVG — lines pulse to show live data flow. If it renders as static in your viewer (some IDEs and PDF exports don't run SVG animation), the plain-text version below shows the identical structure.</sub>
+</div>
+
 ### Architectural Principle
 
 The system is **one backend brain reachable through several channels.** The mobile app, farmer web dashboard, staff dashboard, and phone call all query the same backend for the same facts. The operational database holds all live data. AgroChain only receives a narrow, pre-approved set of events to anchor.
 
 ```
- ┌─────────────────────────────┐
- │ Farmer Phone │
- │ AI Voice · SMS fallback │
- └───────────────┬───────────────┘
- │
- ┌──────────────────┐ │ ┌──────────────────┐
- │ Mobile App │ │ │ Staff Dashboard │
- │ (Expo) │◄───────────┼─────────────►│ Queue · Payments │
- └──────────┬─────────┘ │ └─────────┬─────────┘
- │ ▼ │
- │ ┌───────────────────────────────┐ │
- └───────►│ KisanCall Backend │◄───────┘
- │ Node.js / Fastify API │
- │ Auth · Business Rules · │
- │ Voice Tool Layer │
- └───┬───────────────┬───────────┬───┘
- │ │ │
- ┌──────────▼───┐ ┌────────▼──────┐ ┌───▼─────────────┐
- │ Supabase │ │ Voice AI │ │ Event & Proof │
- │ (Postgres) │ │ Pipeline │ │ Builder │
- │ farmers, slots,│ │ STT LLM │ │ AgroChain │
- │ queue, payments│ │ TTS │ │ (Shardeum) │
- └────────────────┘ └───────────────┘ └────────────────────┘
- ▲
- │
- ┌──────────┴───────────┐
- │ data.gov.in / │
- │ Agmarknet (live prices)│
- └───────────────────────┘
+                       ┌─────────────────────────────┐
+                       │   Farmer Phone                │
+                       │   AI Voice · SMS fallback      │
+                       └───────────────┬───────────────┘
+                                       │
+    ┌────────────────────┐            │            ┌────────────────────┐
+    │  Mobile App          │           │           │  Staff Dashboard      │
+    │  (Expo)               │◄─────────┼─────────►│  Queue · Payments      │
+    └──────────┬───────────┘           │            └──────────┬───────────┘
+               │                       ▼                        │
+               │        ┌───────────────────────────────┐        │
+               └───────►│      KisanCall Backend           │◄───────┘
+                        │      Node.js / Fastify API        │
+                        │      Auth · Business Rules ·      │
+                        │      Voice Tool Layer              │
+                        └───┬───────────────┬───────────┬───┘
+                            │               │           │
+                 ┌──────────▼───┐  ┌────────▼──────┐ ┌───▼─────────────┐
+                 │ Supabase       │  │ Voice AI       │ │ Event & Proof    │
+                 │ (Postgres)     │  │ Pipeline       │ │ Builder →         │
+                 │ farmers, slots,│  │ STT → LLM →    │ │ AgroChain          │
+                 │ queue, payments│  │ TTS            │ │ (Shardeum)          │
+                 └────────────────┘  └───────────────┘ └────────────────────┘
+                            ▲
+                            │
+                 ┌──────────┴───────────┐
+                 │  data.gov.in /         │
+                 │  Agmarknet (live prices)│
+                 └───────────────────────┘
 ```
 
 ### Data Flow for a Transaction Event
@@ -519,13 +525,13 @@ The guiding rule: **nothing personally identifying or financially sensitive is e
 
 ```
 Farmer speech
- Telephony audio stream
- Streaming Speech-to-Text (Deepgram)
- Intent & tool selection
- Backend tool call (get_slot / get_queue / get_price / get_payment / booking_create)
- LLM composes a short answer strictly from tool output (Groq)
- Streaming Text-to-Speech (Deepgram)
- Farmer hears the response
+   → Telephony audio stream
+   → Streaming Speech-to-Text (Deepgram)
+   → Intent & tool selection
+   → Backend tool call (get_slot / get_queue / get_price / get_payment / booking_create)
+   → LLM composes a short answer strictly from tool output (Groq)
+   → Streaming Text-to-Speech (Deepgram)
+   → Farmer hears the response
 ```
 
 ### Context Design
@@ -566,8 +572,8 @@ AgroChain exists to answer one question with confidence: **can the farmer trust 
 ### Event Lifecycle
 
 ```
-PROCUREMENT_CREATED QUANTITY_VERIFIED PRICE_CONFIRMED
- PROCUREMENT_COMPLETED PAYMENT_INITIATED PAYMENT_CONFIRMED
+PROCUREMENT_CREATED → QUANTITY_VERIFIED → PRICE_CONFIRMED
+   → PROCUREMENT_COMPLETED → PAYMENT_INITIATED → PAYMENT_CONFIRMED
 ```
 
 ### What Is Recorded per Event
@@ -613,15 +619,15 @@ This is a **Turborepo + pnpm workspace** monorepo:
 
 ```
 kisansaarthi-agrochain/
-├── backend/ Fastify + TypeScript API (farmers, bookings, queue, payments, mandis)
-├── voice-ai/ Voice AI package — intents, context object, tool stubs, system prompt
-├── mobile-app/ Expo (React Native) farmer app
-├── staff-dashboard/ Next.js staff portal (today, queue, arrivals, procurement, payments)
-├── web-dashboard/ Next.js read-only farmer web fallback
-├── agrochain/ Hardhat + Solidity proof-registry contract (Shardeum testnet)
-├── design/ Shared design tokens & Figma export
-├── docs/ API_CONTRACT.md, DB_SCHEMA.md, PLAN.md
-└── pitch/ Presentation deck, script, Q&A prep
+├── backend/          → Fastify + TypeScript API (farmers, bookings, queue, payments, mandis)
+├── voice-ai/         → Voice AI package — intents, context object, tool stubs, system prompt
+├── mobile-app/       → Expo (React Native) farmer app
+├── staff-dashboard/  → Next.js staff portal (today, queue, arrivals, procurement, payments)
+├── web-dashboard/    → Next.js read-only farmer web fallback
+├── agrochain/        → Hardhat + Solidity proof-registry contract (Shardeum testnet)
+├── design/           → Shared design tokens & Figma export
+├── docs/             → API_CONTRACT.md, DB_SCHEMA.md, PLAN.md
+└── pitch/            → Presentation deck, script, Q&A prep
 ```
 
 | Package | Owner(s) |
@@ -689,7 +695,7 @@ pnpm dev
 
 ---
 
-## ‍‍‍ Team
+## Team
 
 <div align="center">
 
