@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌾 KisanCall
+# KisanCall
 
 ### Voice-First Procurement Coordination with a Verifiable Proof Layer
 
@@ -17,7 +17,7 @@ Built for **Smart India Hackathon 2026** · Problem Statement **26032** · Depar
 
 ---
 
-## 📋 Problem Statement Details
+## Problem Statement Details
 
 | Field | Detail |
 |---|---|
@@ -37,31 +37,32 @@ Built for **Smart India Hackathon 2026** · Problem Statement **26032** · Depar
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
-1. [About the Project](#-about-the-project)
-2. [The Problem](#-the-problem)
-3. [What We're Not Claiming](#-what-were-not-claiming)
-4. [Our Solution & USP](#-our-solution--usp)
-5. [Feature Set](#-feature-set)
-6. [User Personas](#-user-personas)
-7. [End-to-End Farmer Journey](#-end-to-end-farmer-journey)
-8. [Tech Stack](#-tech-stack)
-9. [System Architecture](#-system-architecture)
-10. [Data Model](#-data-model)
-11. [Core API Endpoints](#-core-api-endpoints)
-12. [Voice AI Engineering](#-voice-ai-engineering)
-13. [AgroChain — The Proof Layer](#-agrochain--the-proof-layer)
-14. [Security & Privacy](#-security--privacy)
-15. [Repository Structure](#-repository-structure)
-16. [Getting Started](#-getting-started)
-17. [Roadmap](#-roadmap)
-18. [Impact Metrics](#-impact-metrics)
-19. [Team](#-team)
+1. [About the Project](#about-the-project)
+2. [The Problem](#the-problem)
+3. [What We're Not Claiming](#what-were-not-claiming)
+4. [Our Solution & USP](#our-solution--usp)
+5. [Feature Set](#feature-set)
+6. [User Personas](#user-personas)
+7. [End-to-End Farmer Journey](#end-to-end-farmer-journey)
+8. [Workflow Visualizations](#workflow-visualizations)
+9. [Tech Stack](#tech-stack)
+10. [System Architecture](#system-architecture)
+11. [Data Model](#data-model)
+12. [Core API Endpoints](#core-api-endpoints)
+13. [Voice AI Engineering](#voice-ai-engineering)
+14. [AgroChain — The Proof Layer](#agrochain--the-proof-layer)
+15. [Security & Privacy](#security--privacy)
+16. [Repository Structure](#repository-structure)
+17. [Getting Started](#getting-started)
+18. [Roadmap](#roadmap)
+19. [Impact Metrics](#impact-metrics)
+20. [Team](#team)
 
 ---
 
-## 🎯 About the Project
+## About the Project
 
 **KisanCall** is a voice-first procurement coordination platform for agricultural mandis and government procurement centres. It gives every farmer — including those without a smartphone or reliable data connection — a single conversational way to know their registration status, their procurement slot, their live position in the queue, the day's government-reported mandi price, and the status of their payment, through a **phone call, SMS, or a lightweight app.**
 
@@ -82,7 +83,7 @@ The problem isn't that Indian agriculture lacks digital systems — procurement 
 
 ---
 
-## 🚜 The Problem
+## The Problem
 
 ### The Real-World Workflow
 
@@ -115,7 +116,7 @@ Every one of these steps generates information that's useful to the farmer — b
 
 ---
 
-## ⚖️ What We're Not Claiming
+## What We're Not Claiming
 
 This project deliberately avoids overstating the problem. Digital procurement infrastructure already exists in India (e-NAM, state portals like Punjab's Anaaj Kharid, MP's e-Uparjan, Haryana's Meri Fasal Mera Byora), mandi trading platforms already support electronic payments and lot tracking, and government-backed multilingual voice assistants for farmers are already emerging.
 
@@ -123,7 +124,7 @@ This project deliberately avoids overstating the problem. Digital procurement in
 
 ---
 
-## 💡 Our Solution & USP
+## Our Solution & USP
 
 KisanCall is built around three ideas held together tightly:
 
@@ -144,16 +145,16 @@ KisanCall is built around three ideas held together tightly:
 
 ---
 
-## ✨ Feature Set
+## Feature Set
 
 <details>
-<summary><b>👨‍🌾 Farmer-Facing Features</b></summary>
+<summary><b>‍ Farmer-Facing Features</b></summary>
 
 - Voice and app-based registration, with staff-assisted correction for low-connectivity users
 - Slot booking and confirmation with automatic reminder calls/SMS ahead of the arrival window
 - Live queue position and estimated wait time, available on demand by call or in-app
 - Daily government-reported mandi reference price, always read with date and source
-- Procurement status tracking through plain-language stages: **Booked → Arrived → In Queue → Procured → Payment Processing → Paid**
+- Procurement status tracking through plain-language stages: **Booked Arrived In Queue Procured Payment Processing Paid**
 - Payment status explained conversationally, not just displayed as a code
 - On-demand transaction/proof reference the farmer can request at any time
 - Multilingual voice support, starting with Hindi and English
@@ -162,7 +163,7 @@ KisanCall is built around three ideas held together tightly:
 </details>
 
 <details>
-<summary><b>🧑‍💼 Staff / Procurement-Centre Features</b></summary>
+<summary><b>‍ Staff / Procurement-Centre Features</b></summary>
 
 - Daily farmer list with pending registrations and slot capacity view
 - Arrival marking and live queue management
@@ -175,7 +176,7 @@ KisanCall is built around three ideas held together tightly:
 </details>
 
 <details>
-<summary><b>🎙️ AI Voice Agent Features</b></summary>
+<summary><b> AI Voice Agent Features</b></summary>
 
 - Outbound proactive calling triggered by backend status changes
 - Inbound call handling for farmer-initiated queries
@@ -187,7 +188,7 @@ KisanCall is built around three ideas held together tightly:
 </details>
 
 <details>
-<summary><b>⛓️ AgroChain Proof-Layer Features</b></summary>
+<summary><b> AgroChain Proof-Layer Features</b></summary>
 
 - Event-based anchoring for six lifecycle milestones: procurement created, quantity verified, price confirmed, procurement completed, payment initiated, payment confirmed
 - Only a hash of the canonicalised event payload and its metadata is written on-chain — never personal or bank data
@@ -198,7 +199,7 @@ KisanCall is built around three ideas held together tightly:
 
 ---
 
-## 👥 User Personas
+## User Personas
 
 | Persona | Profile | Needs |
 |---|---|---|
@@ -209,7 +210,7 @@ KisanCall is built around three ideas held together tightly:
 
 ---
 
-## 🛤️ End-to-End Farmer Journey
+## End-to-End Farmer Journey
 
 1. Farmer registers by voice call or through the app
 2. System identifies the farmer's preferred mandi and crop
@@ -226,7 +227,111 @@ KisanCall is built around three ideas held together tightly:
 
 ---
 
-## 🛠️ Tech Stack
+## Workflow Visualizations
+
+### 1. Registration — One Record, Two Entry Points
+
+Both channels write to the exact same backend endpoint, so there is no divergent "app version" and "voice version" of a farmer's record.
+
+```
+   Farmer via Mobile App              Farmer via Voice Call
+   (taps Register)                    ("mera naam Ramesh hai...")
+            │                                    │
+            └──────────────┬─────────────────────┘
+                            ▼
+                  POST /farmers
+                            │
+                            ▼
+                  farmers table (Supabase)
+                            │
+                            ▼
+              Staff Dashboard "Today" view
+              updates instantly (Realtime)
+```
+
+### 2. Slot Booking
+
+```
+  Farmer picks a date/time         OR       Farmer tells the AI naturally
+  (tap in app)                              ("mujhe kal subah aana hai")
+            │                                          │
+            └────────────────────┬─────────────────────┘
+                                  ▼
+                         POST /bookings
+                                  │
+                                  ▼
+                 bookings row created — status: BOOKED
+                    token number assigned
+                                  │
+                                  ▼
+                  Supabase Realtime push
+                                  │
+                    ┌─────────────┴─────────────┐
+                    ▼                             ▼
+        Staff Dashboard live queue        Farmer app / call confirms
+              view updates                  slot + today's price
+```
+
+### 3. Live Queue Tracking
+
+```
+  Status progression (per booking):
+
+  BOOKED ──► ARRIVED ──► IN_QUEUE ──► PROCURED
+
+     Each transition writes a queue_events row
+     (farmer's live position + estimated wait time)
+                       │
+                       ▼
+        ┌──────────────────────────────┐
+        │      Supabase Realtime         │
+        └──────┬────────────────┬────────┘
+               ▼                ▼
+      Mobile app updates    Voice AI answers
+      position with no      "where is my number"
+      manual refresh         by querying the same table
+```
+
+### 4. Payment Tracking
+
+```
+   Booking reaches PROCURED
+             │
+             ▼
+   payments row created — status: PENDING
+             │
+             ▼
+   status: PROCESSING  ─────►  status: PAID
+             │                        │
+             ▼                        ▼
+   Visible identically on:   On PAID → AgroChain transaction
+   - Staff Dashboard          hashes + anchors the event as a
+   - Farmer app status screen tamper-evident proof record
+   - Voice AI (on request)
+```
+
+### 5. Reminders & Notifications
+
+```
+   Backend detects an upcoming slot / a status change
+                       │
+                       ▼
+        Outbound call or SMS triggered automatically
+                       │
+             ┌─────────┴─────────┐
+             ▼                   ▼
+      Call answered        Call not answered
+             │                   │
+             ▼                   ▼
+   Outcome logged to      Automatic retry + SMS,
+   call_logs (visible on   then staff follow-up
+   dashboard's "Recent
+   Voice Calls" panel)
+```
+
+---
+
+## Tech Stack
 
 ### Frontend
 
@@ -301,42 +406,42 @@ KisanCall is built around three ideas held together tightly:
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ### Architectural Principle
 
 The system is **one backend brain reachable through several channels.** The mobile app, farmer web dashboard, staff dashboard, and phone call all query the same backend for the same facts. The operational database holds all live data. AgroChain only receives a narrow, pre-approved set of events to anchor.
 
 ```
-                       ┌─────────────────────────────┐
-                       │   Farmer Phone               │
-                       │   AI Voice · SMS fallback     │
-                       └───────────────┬───────────────┘
-                                       │
-    ┌──────────────────┐              │              ┌──────────────────┐
-    │  Mobile App        │             │              │  Staff Dashboard   │
-    │  (Expo)             │◄───────────┼─────────────►│  Queue · Payments   │
-    └──────────┬─────────┘             │              └─────────┬─────────┘
-               │                       ▼                        │
-               │        ┌───────────────────────────────┐        │
-               └───────►│      KisanCall Backend           │◄───────┘
-                        │      Node.js / Fastify API        │
-                        │      Auth · Business Rules ·      │
-                        │      Voice Tool Layer              │
-                        └───┬───────────────┬───────────┬───┘
-                            │               │           │
-                 ┌──────────▼───┐  ┌────────▼──────┐ ┌───▼─────────────┐
-                 │ Supabase       │  │ Voice AI       │ │ Event & Proof    │
-                 │ (Postgres)     │  │ Pipeline       │ │ Builder →         │
-                 │ farmers, slots,│  │ STT → LLM →    │ │ AgroChain          │
-                 │ queue, payments│  │ TTS            │ │ (Shardeum)          │
-                 └────────────────┘  └───────────────┘ └────────────────────┘
-                            ▲
-                            │
-                 ┌──────────┴───────────┐
-                 │  data.gov.in /         │
-                 │  Agmarknet (live prices)│
-                 └───────────────────────┘
+ ┌─────────────────────────────┐
+ │ Farmer Phone │
+ │ AI Voice · SMS fallback │
+ └───────────────┬───────────────┘
+ │
+ ┌──────────────────┐ │ ┌──────────────────┐
+ │ Mobile App │ │ │ Staff Dashboard │
+ │ (Expo) │◄───────────┼─────────────►│ Queue · Payments │
+ └──────────┬─────────┘ │ └─────────┬─────────┘
+ │ ▼ │
+ │ ┌───────────────────────────────┐ │
+ └───────►│ KisanCall Backend │◄───────┘
+ │ Node.js / Fastify API │
+ │ Auth · Business Rules · │
+ │ Voice Tool Layer │
+ └───┬───────────────┬───────────┬───┘
+ │ │ │
+ ┌──────────▼───┐ ┌────────▼──────┐ ┌───▼─────────────┐
+ │ Supabase │ │ Voice AI │ │ Event & Proof │
+ │ (Postgres) │ │ Pipeline │ │ Builder │
+ │ farmers, slots,│ │ STT LLM │ │ AgroChain │
+ │ queue, payments│ │ TTS │ │ (Shardeum) │
+ └────────────────┘ └───────────────┘ └────────────────────┘
+ ▲
+ │
+ ┌──────────┴───────────┐
+ │ data.gov.in / │
+ │ Agmarknet (live prices)│
+ └───────────────────────┘
 ```
 
 ### Data Flow for a Transaction Event
@@ -349,7 +454,7 @@ The system is **one backend brain reachable through several channels.** The mobi
 
 ---
 
-## 🗄️ Data Model
+## Data Model
 
 ### Core Tables
 
@@ -373,20 +478,20 @@ The guiding rule: **nothing personally identifying or financially sensitive is e
 
 | Data | PostgreSQL (Supabase) | AgroChain (on-chain) |
 |---|:---:|:---:|
-| Farmer name / phone / profile | ✅ | ❌ |
-| Slot / queue data | ✅ | ❌ |
-| Full payment details | ✅ | ❌ |
-| Bank details | ✅ (encrypted) | ❌ |
-| Transaction / event ID | ✅ | ✅ |
-| Hash of selected transaction payload | ✅ | ✅ |
-| Agreed quantity / price hash | ✅ | ✅ |
-| Procurement completion event | ✅ | ✅ |
-| Payment confirmation event hash | ✅ | ✅ |
-| Timestamp / block reference | ✅ | ✅ |
+| Farmer name / phone / profile | | |
+| Slot / queue data | | |
+| Full payment details | | |
+| Bank details | (encrypted) | |
+| Transaction / event ID | | |
+| Hash of selected transaction payload | | |
+| Agreed quantity / price hash | | |
+| Procurement completion event | | |
+| Payment confirmation event hash | | |
+| Timestamp / block reference | | |
 
 ---
 
-## 🔌 Core API Endpoints
+## Core API Endpoints
 
 | Endpoint | Purpose |
 |---|---|
@@ -408,19 +513,19 @@ The guiding rule: **nothing personally identifying or financially sensitive is e
 
 ---
 
-## 🎙️ Voice AI Engineering
+## Voice AI Engineering
 
 ### Pipeline
 
 ```
 Farmer speech
-   → Telephony audio stream
-   → Streaming Speech-to-Text (Deepgram)
-   → Intent & tool selection
-   → Backend tool call (get_slot / get_queue / get_price / get_payment / booking_create)
-   → LLM composes a short answer strictly from tool output (Groq)
-   → Streaming Text-to-Speech (Deepgram)
-   → Farmer hears the response
+ Telephony audio stream
+ Streaming Speech-to-Text (Deepgram)
+ Intent & tool selection
+ Backend tool call (get_slot / get_queue / get_price / get_payment / booking_create)
+ LLM composes a short answer strictly from tool output (Groq)
+ Streaming Text-to-Speech (Deepgram)
+ Farmer hears the response
 ```
 
 ### Context Design
@@ -452,7 +557,7 @@ If the farmer starts speaking while the agent's audio is still playing, the agen
 
 ---
 
-## ⛓️ AgroChain — The Proof Layer
+## AgroChain — The Proof Layer
 
 ### Purpose
 
@@ -461,8 +566,8 @@ AgroChain exists to answer one question with confidence: **can the farmer trust 
 ### Event Lifecycle
 
 ```
-PROCUREMENT_CREATED → QUANTITY_VERIFIED → PRICE_CONFIRMED
-   → PROCUREMENT_COMPLETED → PAYMENT_INITIATED → PAYMENT_CONFIRMED
+PROCUREMENT_CREATED QUANTITY_VERIFIED PRICE_CONFIRMED
+ PROCUREMENT_COMPLETED PAYMENT_INITIATED PAYMENT_CONFIRMED
 ```
 
 ### What Is Recorded per Event
@@ -484,7 +589,7 @@ Proof writes are queued and submitted **asynchronously**, so a temporary blockch
 
 ---
 
-## 🔐 Security & Privacy
+## Security & Privacy
 
 | Risk | Control |
 |---|---|
@@ -502,21 +607,21 @@ Proof writes are queued and submitted **asynchronously**, so a temporary blockch
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 This is a **Turborepo + pnpm workspace** monorepo:
 
 ```
 kisansaarthi-agrochain/
-├── backend/            → Fastify + TypeScript API (farmers, bookings, queue, payments, mandis)
-├── voice-ai/           → Voice AI package — intents, context object, tool stubs, system prompt
-├── mobile-app/         → Expo (React Native) farmer app
-├── staff-dashboard/    → Next.js staff portal (today, queue, arrivals, procurement, payments)
-├── web-dashboard/      → Next.js read-only farmer web fallback
-├── agrochain/          → Hardhat + Solidity proof-registry contract (Shardeum testnet)
-├── design/             → Shared design tokens & Figma export
-├── docs/                → API_CONTRACT.md, DB_SCHEMA.md, PLAN.md
-└── pitch/               → Presentation deck, script, Q&A prep
+├── backend/ Fastify + TypeScript API (farmers, bookings, queue, payments, mandis)
+├── voice-ai/ Voice AI package — intents, context object, tool stubs, system prompt
+├── mobile-app/ Expo (React Native) farmer app
+├── staff-dashboard/ Next.js staff portal (today, queue, arrivals, procurement, payments)
+├── web-dashboard/ Next.js read-only farmer web fallback
+├── agrochain/ Hardhat + Solidity proof-registry contract (Shardeum testnet)
+├── design/ Shared design tokens & Figma export
+├── docs/ API_CONTRACT.md, DB_SCHEMA.md, PLAN.md
+└── pitch/ Presentation deck, script, Q&A prep
 ```
 
 | Package | Owner(s) |
@@ -533,7 +638,7 @@ kisansaarthi-agrochain/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ```bash
 # Clone the repository
@@ -556,7 +661,7 @@ pnpm dev
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 | Phase | Build target | Exit criteria |
 |---|---|---|
@@ -569,7 +674,7 @@ pnpm dev
 
 ---
 
-## 📊 Impact Metrics
+## Impact Metrics
 
 | Metric | How KisanCall moves it | How to measure |
 |---|---|---|
@@ -584,11 +689,11 @@ pnpm dev
 
 ---
 
-## 👨‍👩‍👧‍👦 Team
+## ‍‍‍ Team
 
 <div align="center">
 
-### ❤️ Team TeenTitans
+### Team TeenTitans
 
 **JSS University — Smart India Hackathon 2026**
 
@@ -605,7 +710,7 @@ pnpm dev
 
 ---
 
-## 🙏 Conclusion
+## Conclusion
 
 KisanCall is best understood as a carefully bounded digital public-service product, not a bundle of unrelated technologies. Government and market data give the system facts. The voice layer gives the farmer access without requiring literacy, a smartphone, or a data connection. The procurement engine coordinates the actual workflow at the centre. AgroChain anchors proof of what happened, so trust doesn't depend solely on taking the system's word for it.
 
@@ -613,12 +718,12 @@ KisanCall is best understood as a carefully bounded digital public-service produ
 
 ### Support
 
-💙 If you like this project, give it a ⭐ and share it with your team!
+ If you like this project, give it a and share it with your team!
 
 <div align="center">
 
-**🙏 THANK YOU 🙏**
+** THANK YOU **
 
-*Built with ❤️ by Team TeenTitans for Smart India Hackathon 2026*
+*Built with by Team TeenTitans for Smart India Hackathon 2026*
 
 </div>
